@@ -1,0 +1,13 @@
+component,metric_value,unit,description
+Feature_Extraction_HSV,3.90157761434342,ms/image,Color space conversion and 9 statistical moments
+Feature_Extraction_GLCM,4.768594861975291,ms/image,Grayscale co-occurrence matrix and 4 texture moments
+Feature_Extraction_Total,8.670172476318712,ms/image,Combined 13-D feature extraction per image
+Extraction_Throughput,115.33795927720601,images/sec,Parallel feature extraction throughput across CPU cores
+MLP_Query_Inference,0.08272432432686155,ms/query,Forward pass for query-adaptive weight prediction (13-16-8-2)
+Model_Parameter_Count,378.0,parameters,Trainable parameters of AdaptiveWeightMLP
+Model_Disk_Storage,8.5908203125,KB,Serialized checkpoint size on disk
+Feature_Storage_Per_Image,52.0,bytes/image,Memory footprint per image representation (13 float32)
+Corel_Gallery_Storage,45.65234375,KB,Memory footprint for Corel-1K gallery (899 images)
+Oxford_Gallery_Storage,356.484375,KB,"Memory footprint for Oxford Pet gallery (6,979 images)"
+Corel_Ranking_Latency_N899,0.00866429999587126,ms/query,Distance calculation and top-10 retrieval for N=899
+Oxford_Ranking_Latency_N6979,0.12298659999214578,ms/query,"Distance calculation and top-10 retrieval for N=6,979"

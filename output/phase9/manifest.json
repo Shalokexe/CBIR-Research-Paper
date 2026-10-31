@@ -1,0 +1,28 @@
+{
+    "phase": "Phase 9 \u2014 External Transfer and Computational Analysis",
+    "timestamp": "2026-11-01 02:04:06",
+    "hardware_environment": {
+        "cpu_model": "Intel64 Family 6 Model 183 Stepping 1, GenuineIntel",
+        "logical_cores": 24,
+        "os": "Windows 10",
+        "python_version": "3.11.9",
+        "torch_version": "2.15.0+cpu"
+    },
+    "parameters": {
+        "dataset": "Oxford-IIIT Pet",
+        "breeds": 37,
+        "queries": 370,
+        "gallery_size": 7020,
+        "eval_k": 10
+    },
+    "output_checksums_sha256": {
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/external_transfer_metrics.csv": "c2740dbc2e46baf1d1a5a0345d894558e2ab3f7dcd6ae3d55871bca5c079d7de",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/breed_metrics.csv": "c3db5952632b6a64d50471447fbd7aed4ba6330776aa01766dabfc1952dcc9ae",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/runtime_report.csv": "7f734becaed2f27e36aa8b4eccc5d2a4ece1c1650bda49d0835e299b50561db3",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/transfer_report.md": "515111f9bb23be47ced9c012742b7594bd35f45421ee177f47661ffdc117aae7",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/scalability_report.md": "0bdf8a7590c16fd0dda95a47a570a53b38e88470917bcfad595bed63790b3b67",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/figures/phase9_external_transfer_comparison.png": "735889a62e7b3ba83545719131fbe5ef1597443bab1eae31a9bc54e40d6796ec",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/figures/phase9_per_breed_map_breakdown.png": "f93056d7dbeb5e402072e8cb8a96fb41dd1bd27e86d94afc721f3413aceb607d",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase9/figures/phase9_scalability_analysis.png": "44fe023da518fd2f276a2c2f649148e640901c7f16c619a01a5594cbad2deb69"
+    }
+}

@@ -25,3 +25,4 @@ Thumbs.db
 
 # Raw image datasets
 dataset/
+dataset_external/

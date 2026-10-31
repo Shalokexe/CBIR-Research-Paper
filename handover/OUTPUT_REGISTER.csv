@@ -70,3 +70,14 @@ Phase 8,tests/test_phase8.py,Phase 8 unit test suite,Generated in Phase 8,7 unit
 Phase 8,figures/phase8_baseline_map_comparison.png,Baseline mAP and P@10 bar chart,Generated in Phase 8,Publication figure (300 DPI)
 Phase 8,figures/phase8_per_category_baselines.png,Per-category baseline AP breakdown,Generated in Phase 8,Publication figure (300 DPI)
 Phase 8,figures/phase8_runtime_storage_tradeoff.png,Runtime and storage trade-off curves,Generated in Phase 8,Publication figure (300 DPI)
+Phase 9,output/phase9/external_transfer_metrics.csv,Zero-shot transfer metrics,Generated in Phase 9,6 rows (M1-M6); Oxford-IIIT Pet P@10; R@10; F1@10; mAP; latencies
+Phase 9,output/phase9/breed_metrics.csv,Per-breed transfer metrics,Generated in Phase 9,37 rows; per-breed AP for 12 cat breeds and 25 dog breeds
+Phase 9,output/phase9/runtime_report.csv,Computational component latency breakdown,Generated in Phase 9,Component times; feature extraction; inference; sorting; memory
+Phase 9,output/phase9/transfer_report.md,External transfer technical report,Generated in Phase 9,Zero-shot transfer analysis; fine-grained domain shift; manuscript reconciliation
+Phase 9,output/phase9/scalability_report.md,Computational scalability technical report,Generated in Phase 9,Disclosed hardware; latency profiling across N=899 to 6979; edge viability
+Phase 9,output/phase9/manifest.json,Phase 9 execution manifest,Generated in Phase 9,Input and output SHA256 checksums; parameters; environment audit
+Phase 9,scripts/run_phase9_transfer_scalability.py,Phase 9 execution pipeline,Generated in Phase 9,Standalone script for Oxford Pet extraction; evaluation; benchmarking
+Phase 9,tests/test_phase9.py,Phase 9 unit test suite,Generated in Phase 9,4 unit tests verifying transfer metrics; 37 breeds; latency scaling; SHA256
+Phase 9,figures/phase9_external_transfer_comparison.png,Transfer mAP and P@10 bar chart,Generated in Phase 9,Publication figure (300 DPI)
+Phase 9,figures/phase9_per_breed_map_breakdown.png,Per-breed AP horizontal bar chart,Generated in Phase 9,Publication figure (300 DPI)
+Phase 9,figures/phase9_scalability_analysis.png,Scalability and memory curves vs gallery size,Generated in Phase 9,Publication figure (300 DPI)

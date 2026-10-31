@@ -11,11 +11,12 @@
 | 6 | Statistical validation & inferential testing | Completed and verified | `output/phase6/`, `statistical_validation.py`, `tests/test_phase6.py`, `figures/phase6_*` |
 | 7 | Gallery-composition sensitivity (C1, C2, C3) | Completed and verified | `output/phase7/`, `scripts/run_phase7_sensitivity.py`, `tests/test_phase7.py`, `figures/phase7_*` |
 | 8 | Handcrafted and Deep-Learning Baselines (D1–D5) | Completed and verified | `output/phase8/`, `scripts/run_phase8_baselines.py`, `tests/test_phase8.py`, `figures/phase8_*` |
+| 9 | External Transfer (Oxford Pet) & Scalability | Completed and verified | `output/phase9/`, `scripts/run_phase9_transfer_scalability.py`, `tests/test_phase9.py`, `figures/phase9_*` |
 
 ## Exact stop point
 
-Phase 8 is complete. D1 (LBP), D2 (Pretrained ResNet-50), D3 (Pretrained EfficientNet-B0), D4 (Fixed handcrafted fusion M3, M4, M6), and D5 (Pretrained CLIP ViT-B/32) have all been evaluated against Proposed M5 on the exact same 899-image gallery and 100 held-out test queries under strictly identical evaluation definitions and relevance labels. Complete deep-learning provenance inventory (`feature_inventory.json`), retrieval metrics (`baseline_metrics.csv`), query breakdowns (`per_query_metrics.csv`), category breakdowns (`category_metrics.csv`), paired statistical tests with Holm correction (`paired_comparisons.csv`), computational latency/storage trade-offs (`runtime_comparison.csv`), publication figures (300 DPI), comprehensive report (`phase_d_report.md`), execution manifest (`manifest.json`), and 7 unit tests (49 passing unit tests total across phases 1–8) have been generated and verified.
+Phase 9 is complete. The frozen Corel-trained system (M1–M6) has been evaluated on the official Oxford-IIIT Pet dataset (7,390 images, 37 fine-grained breeds) under a strictly zero-shot transfer protocol without any fine-tuning. Full metrics (`external_transfer_metrics.csv`), breed breakdowns across 12 cat and 25 dog breeds (`breed_metrics.csv`), standalone component latencies and hardware disclosure (`runtime_report.csv`), large-gallery scalability analysis up to N=7,000 (`scalability_report.md`), scientific zero-shot transferability and domain shift report (`transfer_report.md`), execution manifest (`manifest.json`), 3 publication figures (300 DPI), and 4 unit tests (53 passing unit tests total across phases 1–9) have been generated, audited, and verified.
 
-STOP here in accordance with the mandatory prompt instructions ("STOP after Phase 8"). Await explicit user approval before proceeding further.
+STOP here in accordance with the mandatory prompt instructions ("STOP after Phase 9"). Await explicit user approval before proceeding further.
 
 
