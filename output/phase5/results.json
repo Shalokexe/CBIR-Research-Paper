@@ -1,0 +1,128 @@
+{
+    "benchmark_protocol": {
+        "dataset": "Corel-1K",
+        "gallery_images": 899,
+        "query_images": 100,
+        "mlp_train_images": 700,
+        "mlp_validation_images": 199,
+        "excluded_near_duplicates": [
+            "training_set/horses/761.jpg"
+        ],
+        "evaluation_k": 10
+    },
+    "aggregate_model_performance": {
+        "M1": {
+            "precision_at_10": 0.6190000000000001,
+            "recall_at_10": 0.06889013732833955,
+            "f1_at_10": 0.1239818181818182,
+            "mAP": 0.40446217784177163,
+            "mean_latency_ms": 0.20164799963822588
+        },
+        "M2": {
+            "precision_at_10": 0.468,
+            "recall_at_10": 0.05206741573033707,
+            "f1_at_10": 0.09370909090909091,
+            "mAP": 0.35081567804548974,
+            "mean_latency_ms": 0.11496200066176243
+        },
+        "M3": {
+            "precision_at_10": 0.6990000000000001,
+            "recall_at_10": 0.07777902621722844,
+            "f1_at_10": 0.13998181818181815,
+            "mAP": 0.46503600341094925,
+            "mean_latency_ms": 0.4084769997280091
+        },
+        "M4": {
+            "precision_at_10": 0.6730000000000003,
+            "recall_at_10": 0.07489263420724093,
+            "f1_at_10": 0.1347858585858586,
+            "mAP": 0.4336591578219743,
+            "mean_latency_ms": 0.13431400031549856
+        },
+        "M5": {
+            "precision_at_10": 0.7100000000000002,
+            "recall_at_10": 0.07899999999999999,
+            "f1_at_10": 0.14217979797979796,
+            "mAP": 0.479794163851188,
+            "mean_latency_ms": 0.36461499985307455
+        },
+        "M6": {
+            "precision_at_10": 0.6960000000000002,
+            "recall_at_10": 0.07744319600499373,
+            "f1_at_10": 0.13937777777777777,
+            "mAP": 0.4605358605638803,
+            "mean_latency_ms": 0.3429450005933177
+        }
+    },
+    "reference_verification": {
+        "M3": {
+            "evaluated_mAP": 0.46503600341094925,
+            "reference_mAP": 0.465036,
+            "diff": 3.4109492452749635e-09,
+            "exact_match": true
+        },
+        "M5": {
+            "evaluated_mAP": 0.479794163851188,
+            "reference_mAP": 0.479794,
+            "diff": 1.638511880064364e-07,
+            "exact_match": true
+        },
+        "M6": {
+            "evaluated_mAP": 0.4605358605638803,
+            "reference_mAP": 0.460536,
+            "diff": 1.3943611970601566e-07,
+            "exact_match": true
+        }
+    },
+    "statistical_hypothesis_tests": {
+        "M5_vs_M3": {
+            "mean_paired_difference": 0.014758160440238746,
+            "std_paired_difference": 0.06594842845753071,
+            "wins": 51,
+            "ties": 6,
+            "losses": 43,
+            "wilcoxon_stat": 1972.0,
+            "wilcoxon_p_twosided": 0.3259380687512359,
+            "holm_bonferroni_adjusted_p": 0.6518761375024718,
+            "statistically_significant_alpha_005": false,
+            "stratified_bootstrap_95_ci": [
+                0.007413678145203154,
+                0.023384951789048376
+            ]
+        },
+        "M5_vs_M6": {
+            "mean_paired_difference": 0.01925830328730772,
+            "std_paired_difference": 0.07644996307570297,
+            "wins": 53,
+            "ties": 0,
+            "losses": 47,
+            "wilcoxon_stat": 2353.0,
+            "wilcoxon_p_twosided": 0.5542578843858728,
+            "holm_bonferroni_adjusted_p": 0.6518761375024718,
+            "statistically_significant_alpha_005": false,
+            "stratified_bootstrap_95_ci": [
+                0.011935479570996905,
+                0.02797141228351858
+            ]
+        }
+    },
+    "category_sensitivity_analysis": {
+        "flowers_driver_effect": {
+            "flowers_mean_diff_m5_m3": 0.1673492645788734,
+            "flowers_mean_diff_m5_m6": 0.21033644052434766,
+            "mean_diff_without_flowers_m5_m3": -0.0021964066862762183,
+            "mean_diff_without_flowers_m5_m6": -0.0019726008501411607,
+            "interpretation": "Excluding the Flowers category flips the mean paired differences from positive (+0.0148 and +0.0193) to slightly negative (-0.0022 and -0.0020), demonstrating that the aggregate advantage of M5 is heavily concentrated in the Flowers category."
+        }
+    },
+    "query_weight_dispersion": {
+        "w_colour_mean": 0.578403890132904,
+        "w_colour_std": 0.1568303108215332,
+        "w_colour_min": 0.09561975300312042,
+        "w_colour_max": 0.7523216605186462,
+        "w_texture_mean": 0.42159610986709595,
+        "w_texture_std": 0.1568303108215332,
+        "w_texture_min": 0.24767830967903137,
+        "w_texture_max": 0.9043802618980408
+    }
+}
