@@ -1,0 +1,51 @@
+{
+    "phase": "Phase 7 \u2014 Gallery-Composition Sensitivity",
+    "timestamp": "2026-11-01 00:46:04",
+    "execution_duration_seconds": 3.556271800000104,
+    "environment": {
+        "os": "Windows-10-10.0.26200-SP0",
+        "python_version": "3.11.9",
+        "torch_version": "2.15.0+cpu",
+        "numpy_version": "2.4.6",
+        "pandas_version": "3.0.6"
+    },
+    "scenarios_evaluated_count": 16,
+    "models_evaluated": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6"
+    ],
+    "parameters": {
+        "eval_k": 10,
+        "c2_random_seed": 42,
+        "c2_gallery_sizes": {
+            "100pct": 899,
+            "75pct": 679,
+            "50pct": 449,
+            "25pct": 220
+        },
+        "c1_duplicate_group": "duplicate-0001",
+        "c1_excluded_gallery_image": "training_set/horses/761.jpg",
+        "c1_tested_query_exclusion": "training_set/horses/776.jpg"
+    },
+    "input_checksums_sha256": {
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase2/features.npz": "d372ad4cf724e5c924aed2df704c1a06db6a427857abdbcc2db2b0030a976573",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/model/adaptive_weight_mlp.pt": "4ebb783437dc984b2a3872ff2b7d1b7e34c40489e430139f345b5d2dd1737f34",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase1/duplicate_audit.json": "ad969468633b44e4d017944689644eedb61680348e0077557c5425184dea8abc",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase1/split_manifest.csv": "cee8d17765467bbea92fd6654b38e1c9f06e8bf0f3cea246890019ec743efc71",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase5/query_weights.csv": "f1410ef39069b0da3faf77ae1fc998cce34eed114857886c29554bdd25eba427"
+    },
+    "output_checksums_sha256": {
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/scenario_definitions.json": "9ea0d45edc29c0c7d8d394edaf2a250e8f795fd7190a69c90e50cd43a3890933",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/scenario_metrics.csv": "8136a391b91f8c3325452a1f6a17f8938d8750562a6f6dbe4a1dc998040b503c",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/per_query_scenario_metrics.csv": "9c123ddeeffad5b00d7dd29d688e217e054da7cff80f699d748842a16bb7903c",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/category_scenario_metrics.csv": "8185c9a124f7878f06966643a28021fe3f5ed585880421212d622c182ac0c4b6",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/phase_c_report.md": "089d21e197fbe9444ebff93233f691df718e87c0c569525fedc2bd14c8fa2c3d",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/figures/phase7_gallery_size_sensitivity.png": "08ff0b0b4e566fd80b362255f7d802a657808d918d1b38a951ecfd428eb96e1f",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/figures/phase7_c1_duplicate_sensitivity.png": "497fe3f4926f02d8ab324c671aba3e05d88cf9a953e71c2365e577ce4038a348",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase7/figures/phase7_c3_loco_sensitivity.png": "fae2771f60df7224c339fa31fcc6be68e744e3d966ceab8503af0a46d175eb12"
+    }
+}

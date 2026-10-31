@@ -9,11 +9,12 @@
 | 4 | MLP adaptive retrieval and M1–M6 evaluation | Provenance audited; inference verified | `output/phase4/`, `phase4_provenance_audit.md` |
 | 5 | Corrected Corel-1K benchmark evaluation & statistical audit | Completed and verified | `output/phase5/`, `tests/test_phase5.py`, `figures/phase5_*` |
 | 6 | Statistical validation & inferential testing | Completed and verified | `output/phase6/`, `statistical_validation.py`, `tests/test_phase6.py`, `figures/phase6_*` |
+| 7 | Gallery-composition sensitivity (C1, C2, C3) | Completed and verified | `output/phase7/`, `scripts/run_phase7_sensitivity.py`, `tests/test_phase7.py`, `figures/phase7_*` |
 
 ## Exact stop point
 
-Phase 6 is complete. Paired Wilcoxon signed-rank tests, sign-flip Monte Carlo permutation tests, category-stratified paired bootstrap 95% CIs, effect sizes (Cohen's d_z, rank-biserial correlation, r), Holm-Bonferroni family-wise error adjustments, and Flowers outlier decomposition have been executed and validated by 24 passing unit tests.
+Phase 7 is complete. C1 duplicate sensitivity (audit of group `duplicate-0001` and query 776.jpg), C2 gallery size sensitivity (nested stratified 75%, 50%, 25% with mathematical explanation of recall/F1 inflation), C3 category composition and Leave-One-Category-Out (LOCO) sensitivity, publication figures, CSV metrics, manifest, report, and 6 unit tests (30 passing tests total across phases 3–7) have all been generated and verified.
 
-STOP here in accordance with the mandatory phase execution policy. Await explicit user approval before proceeding to manuscript updates or publication packaging.
+STOP here in accordance with the mandatory prompt instructions ("STOP after Phase 7"). Await explicit user approval before proceeding to manuscript updates or publication packaging.
 
 

@@ -46,6 +46,14 @@ Phase 6,statistical_validation.py,Statistical validation script,Generated in Pha
 Phase 6,figures/phase6_paired_difference_distribution.png,Paired difference histograms,Generated in Phase 6,Publication figure
 Phase 6,figures/phase6_bootstrap_distributions.png,Bootstrap sampling distributions,Generated in Phase 6,Publication figure
 Phase 6,figures/phase6_flowers_driver_decomposition.png,Flowers driver sensitivity bar chart,Generated in Phase 6,Publication figure
-
-
-
+Phase 7,output/phase7/scenario_definitions.json,Scenario configuration registry,Generated in Phase 7,16 scenarios; nested stratified gallery and LOCO specs
+Phase 7,output/phase7/scenario_metrics.csv,Overall scenario metrics,Generated in Phase 7,96 rows (16 scenarios x 6 models); P@10; R@10; F1@10; mAP; macro AP
+Phase 7,output/phase7/per_query_scenario_metrics.csv,Query-level scenario metrics,Generated in Phase 7,8934 rows across all scenarios and models
+Phase 7,output/phase7/category_scenario_metrics.csv,Category scenario metrics,Generated in Phase 7,894 rows; per-category AP and M5 paired deltas
+Phase 7,output/phase7/phase_c_report.md,Phase 7 sensitivity report,Generated in Phase 7,Comprehensive sensitivity report (C1; C2; C3)
+Phase 7,output/phase7/manifest.json,Execution manifest,Generated in Phase 7,Input and output SHA256 checksums; parameters; environment
+Phase 7,scripts/run_phase7_sensitivity.py,Sensitivity execution script,Generated in Phase 7,Standalone pipeline reproducing C1; C2; C3
+Phase 7,tests/test_phase7.py,Phase 7 unit test suite,Generated in Phase 7,6 passing unit tests for nesting; bounds; LOCO
+Phase 7,figures/phase7_gallery_size_sensitivity.png,Gallery size sensitivity curves,Generated in Phase 7,Publication figure (4 subplots)
+Phase 7,figures/phase7_c1_duplicate_sensitivity.png,Duplicate query exclusion comparison,Generated in Phase 7,Publication figure
+Phase 7,figures/phase7_c3_loco_sensitivity.png,Leave-one-category-out waterfall,Generated in Phase 7,Publication figure
