@@ -1,0 +1,34 @@
+{
+    "dataset_path": "C:\\Users\\777Pr\\Downloads\\archive (1)\\dataset",
+    "image_count": 1000,
+    "hash_algorithm": "SHA-256",
+    "perceptual_hash": "32x32 grayscale DCT, top-left 8x8, median threshold",
+    "near_duplicate_hamming_threshold": 4,
+    "exact_duplicate_pair_count": 0,
+    "exact_duplicate_pairs": [],
+    "near_duplicate_candidates": [
+        {
+            "left_path": "training_set/horses/761.jpg",
+            "right_path": "training_set/horses/776.jpg",
+            "perceptual_hash_distance": 4,
+            "visual_review": "confirmed same scene and pose",
+            "excluded_from_gallery": [
+                "training_set/horses/761.jpg"
+            ]
+        }
+    ],
+    "excluded_gallery_paths": [
+        "training_set/horses/761.jpg"
+    ],
+    "all_queries_retained": true,
+    "query_gallery_duplicate_candidates_after_exclusion": 0,
+    "remaining_train_validation_duplicate_groups": 0,
+    "counts": {
+        "dataset_images": 1000,
+        "gallery": 899,
+        "queries": 100,
+        "excluded_duplicate_gallery": 1,
+        "mlp_train": 700,
+        "mlp_validation": 199
+    }
+}

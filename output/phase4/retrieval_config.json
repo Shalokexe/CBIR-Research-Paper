@@ -1,0 +1,27 @@
+{
+    "dataset": "Corel-1K",
+    "gallery_size": 899,
+    "query_size": 100,
+    "models_evaluated": [
+        "M1",
+        "M2",
+        "M3",
+        "M4",
+        "M5",
+        "M6"
+    ],
+    "fusion_definitions": {
+        "M1": "Colour-only (9-D HSV moments)",
+        "M2": "Texture-only (4-D GLCM properties)",
+        "M3": "Equal feature-level fusion [0.5*C, 0.5*T]",
+        "M4": "Fixed feature-level fusion [0.7*C, 0.3*T]",
+        "M5": "Query-adaptive distance-level fusion D = sqrt(wC(q)*DC^2 + wT(q)*DT^2)",
+        "M6": "Fixed distance-level control D = sqrt(wC_mean*DC^2 + wT_mean*DT^2)"
+    },
+    "m6_fixed_weights": {
+        "w_colour": 0.578403890132904,
+        "w_texture": 0.42159610986709595
+    },
+    "mlp_checkpoint": "C:\\Users\\777Pr\\research paper implement\\model\\adaptive_weight_mlp.pt",
+    "evaluation_k": 10
+}

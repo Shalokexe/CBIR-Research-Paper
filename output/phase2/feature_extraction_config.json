@@ -1,0 +1,66 @@
+{
+    "dataset_name": "Corel-1K",
+    "dataset_path": "C:\\Users\\777Pr\\Downloads\\archive (1)\\dataset",
+    "random_seed": 42,
+    "gallery_count": 899,
+    "query_count": 100,
+    "total_evaluated_images": 999,
+    "hsv_color_specification": {
+        "dimensions": 9,
+        "descriptors": [
+            "mean",
+            "std",
+            "skewness"
+        ],
+        "channels": [
+            "H",
+            "S",
+            "V"
+        ],
+        "conversion": "RGB -> HSV via matplotlib.colors.rgb_to_hsv",
+        "value_ranges": {
+            "H": "[0.0, 1.0)",
+            "S": "[0.0, 1.0]",
+            "V": "[0.0, 1.0]"
+        },
+        "calculation_method": "Pixel-based across flattened channel arrays",
+        "skewness_formula": "mean((ch - mean)^3) / std^3",
+        "zero_variance_threshold": 1e-06,
+        "zero_variance_fallback": "skewness = 0.0"
+    },
+    "glcm_texture_specification": {
+        "dimensions": 4,
+        "properties": [
+            "contrast",
+            "correlation",
+            "energy",
+            "homogeneity"
+        ],
+        "grayscale_conversion": "PIL 8-bit grayscale ('L' mode)",
+        "quantization_levels": 256,
+        "pixel_distance": 1,
+        "angles_degrees": [
+            0,
+            45,
+            90,
+            135
+        ],
+        "angles_radians": [
+            0.0,
+            0.7853981633974483,
+            1.5707963267948966,
+            2.356194490192345
+        ],
+        "symmetric": true,
+        "normed": true,
+        "averaging_method": "Arithmetic mean of graycoprops across the four orientations"
+    },
+    "total_feature_dimensions": 13,
+    "normalization_protocol": {
+        "algorithm": "Min-Max Normalization",
+        "fitting_scope": "Gallery images ONLY (899 images)",
+        "query_isolation": "Held-out queries strictly excluded from parameter fitting",
+        "zero_range_threshold": 1e-08,
+        "zero_range_fallback": "range = 1.0"
+    }
+}
