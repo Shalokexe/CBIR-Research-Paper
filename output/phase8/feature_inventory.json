@@ -1,0 +1,97 @@
+{
+    "evaluation_protocol": {
+        "dataset": "Corel-1K (Wang dataset)",
+        "gallery_images": 899,
+        "query_images": 100,
+        "near_duplicate_excluded_from_gallery": "training_set/horses/761.jpg",
+        "eval_cutoff_k": 10,
+        "evaluation_metric_definitions": "Precision@10, Recall@10, F1@10, full-gallery Average Precision (mAP)"
+    },
+    "methods": {
+        "M5_proposed": {
+            "name": "Proposed Method (AI-Weighted Hybrid HSV & GLCM)",
+            "category": "Handcrafted Feature Adaptive Fusion",
+            "feature_sources": [
+                "9-D HSV Color Moments",
+                "4-D GLCM Texture Moments"
+            ],
+            "feature_dimensionality": 13,
+            "input_resolution": "Variable original (256x384 / 384x256)",
+            "normalization": "Gallery-only Z-score standardization (Phase 2)",
+            "fusion_mechanism": "Query-adaptive distance weighting via trained 2-layer MLP (13 -> 16 -> 2, Softmax)",
+            "checkpoint": "model/adaptive_weight_mlp.pt",
+            "distance_metric": "D = sqrt(w_C * D_C^2 + w_T * D_T^2)",
+            "training_status": "Trained on 700 gallery images (group-disjoint); zero query leakage"
+        },
+        "D1_LBP": {
+            "name": "Local Binary Patterns (LBP)",
+            "category": "Handcrafted Texture Descriptor",
+            "implementation": "skimage.feature.local_binary_pattern",
+            "parameters": {
+                "P": 8,
+                "R": 1.0,
+                "method": "uniform"
+            },
+            "feature_dimensionality": 10,
+            "input_resolution": "Grayscale original",
+            "normalization": "L1 normalization (sum to 1.0)",
+            "distance_metric": "Chi-Square distance: D(q, g) = 0.5 * sum ( (q-g)^2 / (q+g+eps) )",
+            "training_status": "Non-parametric (no training required)"
+        },
+        "D2_ResNet50": {
+            "name": "Pretrained ResNet-50",
+            "category": "Deep Convolutional Neural Network",
+            "framework": "PyTorch / torchvision.models",
+            "model_variant": "resnet50",
+            "checkpoint_source": "torchvision.models.ResNet50_Weights.DEFAULT (IMAGENET1K_V2)",
+            "feature_extraction_layer": "Global Average Pooling (avgpool, preceding classification fc)",
+            "feature_dimensionality": 2048,
+            "input_resolution": "224x224 (Resize 256, CenterCrop 224)",
+            "normalization": "ImageNet mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]",
+            "embedding_normalization": "L2 unit sphere normalization",
+            "distance_metric": "Cosine Distance: D(q, g) = 1 - dot(q, g)",
+            "training_status": "Pretrained on ImageNet-1K; strictly frozen (zero fine-tuning on Corel-1K)"
+        },
+        "D3_EfficientNet": {
+            "name": "Pretrained EfficientNet-B0",
+            "category": "Deep Efficient Convolutional Architecture",
+            "framework": "PyTorch / torchvision.models",
+            "model_variant": "efficientnet_b0",
+            "checkpoint_source": "torchvision.models.EfficientNet_B0_Weights.DEFAULT (IMAGENET1K_V1)",
+            "feature_extraction_layer": "Global Average Pooling (avgpool)",
+            "feature_dimensionality": 1280,
+            "input_resolution": "224x224 (Resize 256, CenterCrop 224)",
+            "normalization": "ImageNet mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]",
+            "embedding_normalization": "L2 unit sphere normalization",
+            "distance_metric": "Cosine Distance: D(q, g) = 1 - dot(q, g)",
+            "training_status": "Pretrained on ImageNet-1K; strictly frozen (zero fine-tuning on Corel-1K)"
+        },
+        "D4_Fixed_HSV_GLCM": {
+            "name": "Fixed Handcrafted HSV & GLCM Fusion",
+            "category": "Handcrafted Fixed Fusion",
+            "variants": {
+                "M3_Equal": "Equal 0.5/0.5 feature-level concatenation (13-D, Euclidean)",
+                "M4_Fixed": "0.7/0.3 feature-level concatenation (13-D, Euclidean)",
+                "M6_MeanControl": "Fixed distance-level weighting with mean reference query weights [0.5784, 0.4216]"
+            },
+            "feature_dimensionality": 13,
+            "input_resolution": "Variable original (256x384 / 384x256)",
+            "normalization": "Gallery-only Z-score standardization (Phase 2)",
+            "training_status": "Fixed baseline weights; zero query fine-tuning"
+        },
+        "D5_CLIP": {
+            "name": "CLIP Vision Transformer (ViT-B/32)",
+            "category": "Vision-Language Foundation Model",
+            "framework": "open_clip_torch",
+            "model_variant": "ViT-B-32",
+            "checkpoint_source": "LAION-2B pretrained weights (laion2b_s34b_b79k)",
+            "feature_extraction_layer": "Visual Transformer output projection head (encode_image)",
+            "feature_dimensionality": 512,
+            "input_resolution": "224x224 (CLIP standard bicubic resize & center crop)",
+            "normalization": "CLIP standard mean=[0.4814, 0.4578, 0.4082], std=[0.2686, 0.2613, 0.2757]",
+            "embedding_normalization": "L2 unit sphere normalization",
+            "distance_metric": "Cosine Distance: D(q, g) = 1 - dot(q, g)",
+            "training_status": "Pretrained on LAION-2B; strictly frozen (zero fine-tuning on Corel-1K)"
+        }
+    }
+}

@@ -9,8 +9,9 @@ import os
 # ==========================================
 # 1. Dataset Configuration
 # ==========================================
-DEFAULT_DATASET_PATH = r"C:\Users\777Pr\Downloads\archive (1)\dataset"
-DATASET_PATH = Path(os.getenv("COREL_DATASET_PATH", DEFAULT_DATASET_PATH)).resolve()
+LOCAL_DATASET_PATH = Path(__file__).resolve().parent / "dataset"
+DEFAULT_DATASET_PATH = LOCAL_DATASET_PATH if LOCAL_DATASET_PATH.exists() else Path(r"C:\Users\777Pr\Downloads\archive (1)\dataset")
+DATASET_PATH = Path(os.getenv("COREL_DATASET_PATH", str(DEFAULT_DATASET_PATH))).resolve()
 
 # Expected categories in Corel-1K dataset (10 categories, 100 images each)
 EXPECTED_CATEGORIES = [

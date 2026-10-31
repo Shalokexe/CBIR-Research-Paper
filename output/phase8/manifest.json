@@ -1,0 +1,49 @@
+{
+    "phase": "Phase 8 \u2014 Handcrafted and Deep-Learning Baselines",
+    "timestamp": "2026-11-01 01:17:27",
+    "execution_duration_seconds": 2.260542500007432,
+    "environment": {
+        "os": "Windows-10-10.0.26200-SP0",
+        "python_version": "3.11.9",
+        "torch_version": "2.15.0+cpu",
+        "torchvision_version": "C:\\Users\\ROG STRIX\\AppData\\Local\\Programs\\Python\\Python311\\Lib\\site-packages\\torchvision\\models\\__init__.py",
+        "open_clip_installed": true,
+        "numpy_version": "2.4.6",
+        "pandas_version": "3.0.6"
+    },
+    "methods_evaluated": [
+        "M5_proposed",
+        "D1_LBP",
+        "D2_ResNet50",
+        "D3_EfficientNet",
+        "D4_Fixed_M3",
+        "D4_Fixed_M4",
+        "D4_Fixed_M6",
+        "D5_CLIP"
+    ],
+    "parameters": {
+        "eval_k": 10,
+        "gallery_size": 899,
+        "query_count": 100,
+        "comparison_family_size": 7,
+        "multiple_testing_adjustment": "Holm-Bonferroni"
+    },
+    "input_checksums_sha256": {
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase1/split_manifest.csv": "cee8d17765467bbea92fd6654b38e1c9f06e8bf0f3cea246890019ec743efc71",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase2/features.npz": "d372ad4cf724e5c924aed2df704c1a06db6a427857abdbcc2db2b0030a976573",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase5/per_query_metrics.csv": "d3acbeb640dd54064ecdf9612bc2bca6d91edd46672b727f577dcda05f00c510",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/model/adaptive_weight_mlp.pt": "4ebb783437dc984b2a3872ff2b7d1b7e34c40489e430139f345b5d2dd1737f34"
+    },
+    "output_checksums_sha256": {
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/baseline_metrics.csv": "6ea6c8490c2461be684dc1465e6e85d2c11dff816ac616b474423dbaaf1c53a3",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/per_query_metrics.csv": "692631f7bc10d62b3d781d2dd273b243847c4c72bad2b0e4172841e799d7bf6c",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/category_metrics.csv": "1f875c891386f438b8f077fd9118f6db54bd21018fc367e97cf5fb10d5d725f0",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/paired_comparisons.csv": "c4144a3990874652dea8d74ce3216fda857d3346b6adcbfd38ddf7523cc0e8b6",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/runtime_comparison.csv": "1d7270cedab8fd29dec86b5d06530055c3efd93adac88e3b017d882279e3cc2b",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/feature_inventory.json": "64f95be38d0b70057add16305a6e73d8db4088c60fee17fc574d562763a399dc",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/phase_d_report.md": "c21da3adffba3fbfb7b6413287e20693dbcf3df22e282f96674a1e4fabd01aad",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/figures/phase8_baseline_map_comparison.png": "2ca3d9417d7037138507e18d515a031d8675e30708a732c5e152f8b2381c71f0",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/figures/phase8_per_category_baselines.png": "b9e7f51927f51e4d8f119b2b13501a22e23183566d5d22de632a504a8c7f223e",
+        "C:/Users/ROG STRIX/Downloads/ICAIN1567_CWBR_Project_Handover_Antigravity/research paper implement/output/phase8/figures/phase8_runtime_storage_tradeoff.png": "eb847f0172dd1981d7cc2ed0b1ee98cbf2523bee73293c5c21ca68ab83bbbe07"
+    }
+}

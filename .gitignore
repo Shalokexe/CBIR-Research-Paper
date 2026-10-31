@@ -22,3 +22,6 @@ env/
 *.swo
 .DS_Store
 Thumbs.db
+
+# Raw image datasets
+dataset/

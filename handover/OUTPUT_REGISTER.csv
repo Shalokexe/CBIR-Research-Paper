@@ -57,3 +57,16 @@ Phase 7,tests/test_phase7.py,Phase 7 unit test suite,Generated in Phase 7,6 pass
 Phase 7,figures/phase7_gallery_size_sensitivity.png,Gallery size sensitivity curves,Generated in Phase 7,Publication figure (4 subplots)
 Phase 7,figures/phase7_c1_duplicate_sensitivity.png,Duplicate query exclusion comparison,Generated in Phase 7,Publication figure
 Phase 7,figures/phase7_c3_loco_sensitivity.png,Leave-one-category-out waterfall,Generated in Phase 7,Publication figure
+Phase 8,output/phase8/baseline_metrics.csv,Overall baseline retrieval metrics,Generated in Phase 8,8 rows (D1-D5 + M5); P@10; R@10; F1@10; mAP; latencies; storage
+Phase 8,output/phase8/per_query_metrics.csv,Query-level baseline metrics,Generated in Phase 8,800 rows (100 queries x 8 methods); unrounded P; R; F1; AP
+Phase 8,output/phase8/category_metrics.csv,Category-level baseline metrics,Generated in Phase 8,80 rows (10 categories x 8 methods); category AP breakdowns
+Phase 8,output/phase8/paired_comparisons.csv,Paired statistical tests against M5,Generated in Phase 8,7 comparisons; Wilcoxon signed-rank; Cohen dz; Holm-Bonferroni correction
+Phase 8,output/phase8/runtime_comparison.csv,Runtime and storage trade-off matrix,Generated in Phase 8,8 rows; extraction latency; throughput; memory footprint; mAP
+Phase 8,output/phase8/feature_inventory.json,Baseline feature inventory,Generated in Phase 8,Model variants; checkpoints; layers; resolutions; normalizations; frozen status
+Phase 8,output/phase8/phase_d_report.md,Phase 8 comprehensive technical report,Generated in Phase 8,Detailed empirical findings; statistical tables; deployment trade-offs
+Phase 8,output/phase8/manifest.json,Phase 8 execution manifest,Generated in Phase 8,Input/output SHA256 checksums; parameters; environment audit
+Phase 8,scripts/run_phase8_baselines.py,Phase 8 baseline execution pipeline,Generated in Phase 8,Standalone script extracting baselines; running rankings; computing tests
+Phase 8,tests/test_phase8.py,Phase 8 unit test suite,Generated in Phase 8,7 unit tests verifying metric validity; storage invariants; cryptographic SHA256
+Phase 8,figures/phase8_baseline_map_comparison.png,Baseline mAP and P@10 bar chart,Generated in Phase 8,Publication figure (300 DPI)
+Phase 8,figures/phase8_per_category_baselines.png,Per-category baseline AP breakdown,Generated in Phase 8,Publication figure (300 DPI)
+Phase 8,figures/phase8_runtime_storage_tradeoff.png,Runtime and storage trade-off curves,Generated in Phase 8,Publication figure (300 DPI)
