@@ -8,11 +8,12 @@
 | 3 | M1–M4 baselines | Completed and previously approved | `output/phase3/`, `figures/phase3_*` |
 | 4 | MLP adaptive retrieval and M1–M6 evaluation | Provenance audited; inference verified | `output/phase4/`, `phase4_provenance_audit.md` |
 | 5 | Corrected Corel-1K benchmark evaluation & statistical audit | Completed and verified | `output/phase5/`, `tests/test_phase5.py`, `figures/phase5_*` |
-| 6 | Publication package/manuscript validation | Pending Phase 5 approval | Bring in the later Phase 6 deliverables before relying on them |
+| 6 | Statistical validation & inferential testing | Completed and verified | `output/phase6/`, `statistical_validation.py`, `tests/test_phase6.py`, `figures/phase6_*` |
 
 ## Exact stop point
 
-Phase 5 is complete. Full M1–M6 benchmark, per-query evaluations, paired Wilcoxon tests, Holm-Bonferroni corrections, stratified bootstrap 95% CIs, and Flowers category sensitivity analysis have been successfully executed and validated by 18 passing tests.
+Phase 6 is complete. Paired Wilcoxon signed-rank tests, sign-flip Monte Carlo permutation tests, category-stratified paired bootstrap 95% CIs, effect sizes (Cohen's d_z, rank-biserial correlation, r), Holm-Bonferroni family-wise error adjustments, and Flowers outlier decomposition have been executed and validated by 24 passing unit tests.
 
-STOP here and wait for explicit user approval before proceeding to Phase 6.
+STOP here in accordance with the mandatory phase execution policy. Await explicit user approval before proceeding to manuscript updates or publication packaging.
+
 

@@ -1,0 +1,57 @@
+{
+    "phase": 6,
+    "phase_name": "Statistical Validation",
+    "timestamp_utc": "2026-10-31T19:03:47Z",
+    "input_artifacts": {
+        "p5_per_query_metrics": {
+            "path": "C:\\Users\\ROG STRIX\\Downloads\\ICAIN1567_CWBR_Project_Handover_Antigravity\\research paper implement\\output\\phase5\\per_query_metrics.csv",
+            "sha256": "d3acbeb640dd54064ecdf9612bc2bca6d91edd46672b727f577dcda05f00c510"
+        },
+        "p5_results": {
+            "path": "C:\\Users\\ROG STRIX\\Downloads\\ICAIN1567_CWBR_Project_Handover_Antigravity\\research paper implement\\output\\phase5\\results.json",
+            "sha256": "c908e53fe4975ea876a59ac1bc0ee8b7b25dc574908918ab8613577c1de7766e"
+        },
+        "p5_category_metrics": {
+            "path": "C:\\Users\\ROG STRIX\\Downloads\\ICAIN1567_CWBR_Project_Handover_Antigravity\\research paper implement\\output\\phase5\\category_metrics.csv",
+            "sha256": "14b3e15c57b3d5cb2bc9c003accd6ee900cf9c3a60aeab95202e458d31184681"
+        },
+        "split_manifest": {
+            "path": "C:\\Users\\ROG STRIX\\Downloads\\ICAIN1567_CWBR_Project_Handover_Antigravity\\research paper implement\\output\\phase1\\split_manifest.csv",
+            "sha256": "cee8d17765467bbea92fd6654b38e1c9f06e8bf0f3cea246890019ec743efc71"
+        }
+    },
+    "execution_parameters": {
+        "n_queries": 100,
+        "prespecified_primary_comparisons": [
+            "M5_vs_M6",
+            "M5_vs_M3"
+        ],
+        "bootstrap_replicates": 10000,
+        "bootstrap_seed": 42,
+        "bootstrap_scheme": "category_stratified_paired",
+        "permutation_replicates": 100000,
+        "permutation_seed": 42,
+        "significance_threshold_alpha": 0.05,
+        "multiple_comparison_method": "Holm-Bonferroni step-down"
+    },
+    "software_environment": {
+        "os": "Windows",
+        "os_release": "10",
+        "python_version": "3.11.9",
+        "numpy_version": "2.4.6",
+        "scipy_version": "1.17.1",
+        "pandas_version": "3.0.6"
+    },
+    "formal_statistical_conclusion": {
+        "wilcoxon_m5_vs_m3_adjusted_p": 0.6518761375024718,
+        "wilcoxon_m5_vs_m6_adjusted_p": 0.6518761375024718,
+        "is_m5_statistically_superior": false,
+        "verdict": "Neither primary paired Wilcoxon comparison reaches statistical significance after Holm adjustment (p = 0.6519 for both). The descriptive mAP improvement of M5 is heavily concentrated in the Flowers category."
+    },
+    "limitations": [
+        "All query comparisons evaluate against a common 899-image gallery. Inferential conclusions are conditional on this gallery partition.",
+        "Results do not establish independent dataset replication.",
+        "Sensitivity experiments using multiple random splits are not five independent training seeds on a fixed split.",
+        "Generalization to other image retrieval domains or datasets is not claimed."
+    ]
+}

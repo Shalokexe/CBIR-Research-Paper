@@ -38,6 +38,14 @@ Phase 5,figures/phase5_query_difference_distribution.png,Phase 5 query differenc
 Phase 5,figures/phase5_flowers_influence_analysis.png,Phase 5 Flowers driver analysis,Generated in Phase 5,Publication figure
 Phase 5,figures/phase5_m5_weight_distribution.png,Phase 5 M5 weight distribution,Generated in Phase 5,Publication figure
 Phase 5,figures/phase5_category_weights.png,Phase 5 category weights,Generated in Phase 5,Publication figure
-Phase 6,Publication package and manuscript validation,Publication deliverables,Reported later; not in supplied ZIP,Obtain companion package/report from original workflow
+Phase 6,output/phase6/paired_test_summary.csv,Paired test summary,Generated in Phase 6,Wilcoxon tests; sign-flip permutations; Holm adjustments; effect sizes
+Phase 6,output/phase6/bootstrap_ci_summary.csv,Bootstrap CI summary,Generated in Phase 6,10000 resamples; stratified 95% and 99% percentile and BCa CIs
+Phase 6,output/phase6/significance_report.md,Significance report,Generated in Phase 6,Comprehensive inferential statistical report
+Phase 6,output/phase6/manifest.json,Execution manifest,Generated in Phase 6,Input SHA256 hashes; parameters; environment; limitations
+Phase 6,statistical_validation.py,Statistical validation script,Generated in Phase 6,Standalone execution module loading Phase 5 frozen results
+Phase 6,figures/phase6_paired_difference_distribution.png,Paired difference histograms,Generated in Phase 6,Publication figure
+Phase 6,figures/phase6_bootstrap_distributions.png,Bootstrap sampling distributions,Generated in Phase 6,Publication figure
+Phase 6,figures/phase6_flowers_driver_decomposition.png,Flowers driver sensitivity bar chart,Generated in Phase 6,Publication figure
+
 
 
