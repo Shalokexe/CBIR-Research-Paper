@@ -1,0 +1,17 @@
+\begin{table}[!t]
+\centering
+\caption{Zero-shot cross-dataset retrieval performance on the 37-breed Oxford-IIIT Pet dataset using frozen Corel-1K models.}
+\label{tab:oxford_transfer}
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Model ID} & \textbf{Configuration Name} & \textbf{Modality} & \textbf{Precision@10} & \textbf{Recall@10} & \textbf{F1@10} & \textbf{mAP} & \textbf{Cats mAP (N=12)} & \textbf{Dogs mAP (N=25)} \\
+\midrule
+M1_Colour & Colour Only (M1, 9-D HSV) & 9-D Colour & 0.0562 & 0.0030 & 0.0056 & \textbf{0.031997} & 0.0294 & 0.0332 \\
+M2_Texture & Texture Only (M2, 4-D GLCM) & 4-D Texture & 0.0338 & 0.0018 & 0.0034 & \textbf{0.031960} & 0.0332 & 0.0314 \\
+M3_Equal & Equal Fusion (M3, 0.5/0.5) & 13-D Hybrid & 0.0568 & 0.0030 & 0.0057 & \textbf{0.033275} & 0.0319 & 0.0339 \\
+M4_Fixed & Fixed Weight Fusion (M4, 0.7/0.3) & 13-D Hybrid & 0.0570 & 0.0030 & 0.0057 & \textbf{0.032556} & 0.0303 & 0.0336 \\
+M5_Proposed_Adaptive & Proposed Adaptive MLP (M5, Zero-Shot) & 13-D Hybrid & 0.0546 & 0.0029 & 0.0055 & \textbf{0.033332} & 0.0326 & 0.0337 \\
+M6_Mean_Control & Mean Weight Control (M6, 0.578/0.422) & 13-D Hybrid & 0.0584 & 0.0031 & 0.0059 & \textbf{0.033155} & 0.0315 & 0.0339 \\
+\bottomrule
+\end{tabular}
+\end{table}

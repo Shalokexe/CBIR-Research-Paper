@@ -1,0 +1,19 @@
+\begin{table}[!t]
+\centering
+\caption{Comparative evaluation between the proposed adaptive handcrafted system and established retrieval baselines (D1--D5).}
+\label{tab:deep_baselines}
+\begin{tabular}{lcccccccccc}
+\toprule
+\textbf{Method ID} & \textbf{Descriptor / Model Name} & \textbf{Architecture Family} & \textbf{Dim} & \textbf{Distance Metric} & \textbf{Precision@10} & \textbf{Recall@10} & \textbf{F1@10} & \textbf{mAP} & \textbf{Storage / Img} & \textbf{Extraction Latency} \\
+\midrule
+M5_proposed & Proposed (AI-Adaptive HSV+GLCM) & handcrafted_adaptive & 13 & Adaptive Weighted Euclidean & 0.7100 & 0.0790 & 0.1422 & \textbf{0.4798} & 52 B & 0.45 ms \\
+D1_LBP & Local Binary Patterns (LBP) & handcrafted_texture & 10 & Chi-Square & 0.5090 & 0.0566 & 0.1019 & \textbf{0.3734} & 40 B & 10.82 ms \\
+D2_ResNet50 & Pretrained ResNet-50 & deep_cnn & 2048 & Cosine Distance & 0.9580 & 0.1066 & 0.1918 & \textbf{0.9103} & 8192 B & 24.04 ms \\
+D3_EfficientNet & Pretrained EfficientNet-B0 & deep_cnn & 1280 & Cosine Distance & 0.9550 & 0.1062 & 0.1912 & \textbf{0.8879} & 5120 B & 9.71 ms \\
+D4_Fixed_M3 & Fixed Equal Fusion (M3, 0.5/0.5) & handcrafted_fusion & 13 & Euclidean & 0.6990 & 0.0778 & 0.1400 & \textbf{0.4650} & 52 B & 0.41 ms \\
+D4_Fixed_M4 & Fixed Weight Fusion (M4, 0.7/0.3) & handcrafted_fusion & 13 & Euclidean & 0.6730 & 0.0749 & 0.1348 & \textbf{0.4337} & 52 B & 0.41 ms \\
+D4_Fixed_M6 & Mean Weight Control (M6) & handcrafted_fusion & 13 & Distance-Level Weighted Euclidean & 0.6960 & 0.0774 & 0.1394 & \textbf{0.4605} & 52 B & 0.41 ms \\
+D5_CLIP & CLIP ViT-B/32 (LAION-2B) & deep_vlm & 512 & Cosine Distance & 0.9860 & 0.1097 & 0.1974 & \textbf{0.9485} & 2048 B & 16.60 ms \\
+\bottomrule
+\end{tabular}
+\end{table}

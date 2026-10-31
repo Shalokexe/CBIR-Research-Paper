@@ -1,0 +1,23 @@
+\begin{table}[!t]
+\centering
+\caption{Component-wise computational latency, memory footprint, and storage profile on Intel Core i7-14650HX (CPU native).}
+\label{tab:computational_runtime}
+\begin{tabular}{lccc}
+\toprule
+\textbf{Pipeline Component} & \textbf{Metric Value} & \textbf{Unit} & \textbf{Operational Description} \\
+\midrule
+Feature Extraction HSV & \textbf{3.9016} & ms/image & Color space conversion and 9 statistical moments \\
+Feature Extraction GLCM & \textbf{4.7686} & ms/image & Grayscale co-occurrence matrix and 4 texture moments \\
+Feature Extraction Total & \textbf{8.6702} & ms/image & Combined 13-D feature extraction per image \\
+Extraction Throughput & \textbf{115.3380} & images/sec & Parallel feature extraction throughput across CPU cores \\
+MLP Query Inference & \textbf{0.0827} & ms/query & Forward pass for query-adaptive weight prediction (13-16-8-2) \\
+Model Parameter Count & \textbf{378.0000} & parameters & Trainable parameters of AdaptiveWeightMLP \\
+Model Disk Storage & \textbf{8.5908} & KB & Serialized checkpoint size on disk \\
+Feature Storage Per Image & \textbf{52.0000} & bytes/image & Memory footprint per image representation (13 float32) \\
+Corel Gallery Storage & \textbf{45.6523} & KB & Memory footprint for Corel-1K gallery (899 images) \\
+Oxford Gallery Storage & \textbf{356.4844} & KB & Memory footprint for Oxford Pet gallery (6,979 images) \\
+Corel Ranking Latency N899 & \textbf{0.0087} & ms/query & Distance calculation and top-10 retrieval for N=899 \\
+Oxford Ranking Latency N6979 & \textbf{0.1230} & ms/query & Distance calculation and top-10 retrieval for N=6,979 \\
+\bottomrule
+\end{tabular}
+\end{table}

@@ -81,3 +81,36 @@ Phase 9,tests/test_phase9.py,Phase 9 unit test suite,Generated in Phase 9,4 unit
 Phase 9,figures/phase9_external_transfer_comparison.png,Transfer mAP and P@10 bar chart,Generated in Phase 9,Publication figure (300 DPI)
 Phase 9,figures/phase9_per_breed_map_breakdown.png,Per-breed AP horizontal bar chart,Generated in Phase 9,Publication figure (300 DPI)
 Phase 9,figures/phase9_scalability_analysis.png,Scalability and memory curves vs gallery size,Generated in Phase 9,Publication figure (300 DPI)
+Phase 10,final_research_audit.md,Comprehensive research audit report,Generated in Phase 10,End-to-end audit across 11 tasks; statistical and integrity disclosures
+Phase 10,reproducibility_checklist.md,Machine learning reproducibility checklist,Generated in Phase 10,Conforms to NeurIPS/CVPR/Springer guidelines; deterministic seeds; isolation
+Phase 10,final_results_summary.md,Master benchmark and statistical summary,Generated in Phase 10,Consolidated Corel-1K; statistical contrasts; edge profile; Oxford transfer
+Phase 10,manuscript_integration_recommendation.md,Manuscript integration recommendations,Generated in Phase 10,Explicit recommendations for tables; figures; text corrections in paper
+Phase 10,manuscript_tables/table1_main_performance.tex,Table 1 LaTeX,Generated in Phase 10,Main Corel-1K M1-M6 benchmark comparison
+Phase 10,manuscript_tables/table1_main_performance.csv,Table 1 CSV,Generated in Phase 10,Main Corel-1K M1-M6 benchmark data
+Phase 10,manuscript_tables/table2_statistical_significance.tex,Table 2 LaTeX,Generated in Phase 10,Inferential statistical contrasts against M5 under Holm correction
+Phase 10,manuscript_tables/table2_statistical_significance.csv,Table 2 CSV,Generated in Phase 10,Inferential statistical contrasts data
+Phase 10,manuscript_tables/table3_category_metrics.tex,Table 3 LaTeX,Generated in Phase 10,Per-category AP breakdown across 10 categories for M1-M6 and D1-D5
+Phase 10,manuscript_tables/table3_category_metrics.csv,Table 3 CSV,Generated in Phase 10,Per-category AP breakdown data
+Phase 10,manuscript_tables/table4_gallery_sensitivity.tex,Table 4 LaTeX,Generated in Phase 10,Gallery size sensitivity metrics across 25%; 50%; 75%; 100% subsets
+Phase 10,manuscript_tables/table4_gallery_sensitivity.csv,Table 4 CSV,Generated in Phase 10,Gallery size sensitivity data
+Phase 10,manuscript_tables/table5_deep_baselines.tex,Table 5 LaTeX,Generated in Phase 10,M5 vs D1-D5 comparative evaluation and storage/latency trade-offs
+Phase 10,manuscript_tables/table5_deep_baselines.csv,Table 5 CSV,Generated in Phase 10,M5 vs D1-D5 baseline data
+Phase 10,manuscript_tables/table6_oxford_transfer.tex,Table 6 LaTeX,Generated in Phase 10,Zero-shot Oxford-IIIT Pet transfer performance across 37 breeds
+Phase 10,manuscript_tables/table6_oxford_transfer.csv,Table 6 CSV,Generated in Phase 10,Zero-shot Oxford-IIIT Pet transfer data
+Phase 10,manuscript_tables/table7_runtime_scalability.tex,Table 7 LaTeX,Generated in Phase 10,Hardware profiling; component latencies; memory; linear scaling
+Phase 10,manuscript_tables/table7_runtime_scalability.csv,Table 7 CSV,Generated in Phase 10,Hardware profiling and latency data
+Phase 10,publication_figures/fig_system_architecture.png,Figure 1: System architecture diagram,Generated in Phase 10,Publication-quality 300 DPI diagram
+Phase 10,publication_figures/fig_retrieval_pipeline.png,Figure 2: Retrieval pipeline diagram,Generated in Phase 10,Publication-quality 300 DPI diagram
+Phase 10,publication_figures/fig_mlp_architecture.png,Figure 3: Metric-learning MLP architecture,Generated in Phase 10,Publication-quality 300 DPI diagram
+Phase 10,publication_figures/fig_weight_distributions.png,Figure 4: Query adaptive weight distributions,Generated in Phase 10,Publication-quality 300 DPI histograms
+Phase 10,publication_figures/fig_main_performance_comparison.png,Figure 5: Main Corel M1-M6 bar chart,Generated in Phase 10,Publication-quality 300 DPI chart
+Phase 10,publication_figures/fig_category_performance.png,Figure 6: Per-category performance breakdown,Generated in Phase 10,Publication-quality 300 DPI chart
+Phase 10,publication_figures/fig_gallery_size_sensitivity.png,Figure 7: Gallery size scaling curves,Generated in Phase 10,Publication-quality 300 DPI chart
+Phase 10,publication_figures/fig_deep_learning_comparison.png,Figure 8: Deep learning baseline comparison,Generated in Phase 10,Publication-quality 300 DPI chart
+Phase 10,publication_figures/fig_qualitative_retrieval_examples.png,Figure 9: Qualitative retrieval visual grid,Generated in Phase 10,Publication-quality 300 DPI demonstration
+Phase 10,requirements.txt,Verified dependency requirements,Generated in Phase 10,PyTorch; torchvision; scikit-image; open-clip; pandas; scipy
+Phase 10,environment.yml,Conda environment specification,Generated in Phase 10,Conda environment definition for complete project reproduction
+Phase 10,README.md,Master repository documentation,Generated in Phase 10,Architecture; setup; reproduction; benchmark results; license
+Phase 10,experiment_manifest.json,Cryptographic experiment manifest,Generated in Phase 10,SHA-256 hashes of all verified project deliverables across phases
+Phase 10,scripts/generate_phase10_publication_package.py,Phase 10 execution pipeline,Generated in Phase 10,Standalone generator for tables; figures; reports; manifest
+Phase 10,tests/test_phase10.py,Phase 10 unit test suite,Generated in Phase 10,5 unit tests verifying existence; structural validity; SHA256 integrity

@@ -1,0 +1,19 @@
+name: cbir-icain2026
+channels:
+  - pytorch
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy>=1.24.0
+  - scipy>=1.10.0
+  - scikit-image>=0.20.0
+  - pandas>=2.0.0
+  - matplotlib>=3.7.0
+  - pillow>=9.5.0
+  - pytest>=7.3.0
+  - pip:
+      - torch>=2.0.0
+      - torchvision>=0.15.0
+      - open-clip-torch>=2.20.0

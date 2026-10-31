@@ -1,0 +1,17 @@
+\begin{table}[!t]
+\centering
+\caption{Retrieval performance comparison across the six evaluated configurations on the corrected Corel-1K benchmark (899-image gallery, 100 held-out queries).}
+\label{tab:main_results}
+\begin{tabular}{lcccccccc}
+\toprule
+\textbf{Model} & \textbf{Configuration Name} & \textbf{Feature Modality} & \textbf{Dim} & \textbf{Precision@10} & \textbf{Recall@10} & \textbf{F1@10} & \textbf{Mean AP (mAP)} & \textbf{Latency (ms)} \\
+\midrule
+M1 & Colour Only & HSV Statistical Moments & 9 & 0.6190 & 0.0689 & 0.1240 & 0.4045 & 0.202 \\
+M2 & Texture Only & GLCM Texture Moments & 4 & 0.4680 & 0.0521 & 0.0937 & 0.3508 & 0.115 \\
+M3 & Equal Fusion (0.5/0.5) & HSV + GLCM (Fixed 0.5/0.5) & 13 & 0.6990 & 0.0778 & 0.1400 & 0.4650 & 0.408 \\
+M4 & Heuristic Fixed (0.7/0.3) & HSV + GLCM (Fixed 0.7/0.3) & 13 & 0.6730 & 0.0749 & 0.1348 & 0.4337 & 0.134 \\
+\textbf{M5} & Proposed Adaptive MLP & AI-Weighted Hybrid Distance & 13 & \textbf{0.7100} & \textbf{0.0790} & \textbf{0.1422} & \textbf{0.4798} & 0.365 \\
+M6 & Mean Weight Control & Distance-Level Fixed Control & 13 & 0.6960 & 0.0774 & 0.1394 & 0.4605 & 0.343 \\
+\bottomrule
+\end{tabular}
+\end{table}

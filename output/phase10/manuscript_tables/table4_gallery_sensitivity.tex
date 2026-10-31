@@ -1,0 +1,27 @@
+\begin{table}[!t]
+\centering
+\caption{Retrieval metrics under nested stratified gallery-size scaling (C2). Smaller galleries alter retrieval difficulty and mathematically inflate recall and F1.}
+\label{tab:gallery_sensitivity}
+\begin{tabular}{lccccccc}
+\toprule
+\textbf{Scenario} & \textbf{Gallery Size ($N$)} & \textbf{Sampling Fraction} & \textbf{Model} & \textbf{Precision@10} & \textbf{Recall@10} & \textbf{F1@10} & \textbf{mAP} \\
+\midrule
+c2_gallery_25pct & 220 & 25% & M3 & 0.5420 & 0.2464 & 0.3387 & 0.4615 \\
+c2_gallery_25pct & 220 & 25% & M4 & 0.4920 & 0.2236 & 0.3075 & 0.4270 \\
+c2_gallery_25pct & 220 & 25% & M5 & 0.5410 & 0.2459 & 0.3381 & 0.4730 \\
+c2_gallery_25pct & 220 & 25% & M6 & 0.5330 & 0.2423 & 0.3331 & 0.4565 \\
+c2_gallery_50pct & 449 & 50% & M3 & 0.6500 & 0.1448 & 0.2369 & 0.4687 \\
+c2_gallery_50pct & 449 & 50% & M4 & 0.6070 & 0.1353 & 0.2213 & 0.4354 \\
+c2_gallery_50pct & 449 & 50% & M5 & 0.6550 & 0.1460 & 0.2387 & 0.4814 \\
+c2_gallery_50pct & 449 & 50% & M6 & 0.6470 & 0.1442 & 0.2358 & 0.4638 \\
+c2_gallery_75pct & 679 & 75% & M3 & 0.6620 & 0.0975 & 0.1700 & 0.4614 \\
+c2_gallery_75pct & 679 & 75% & M4 & 0.6360 & 0.0937 & 0.1634 & 0.4284 \\
+c2_gallery_75pct & 679 & 75% & M5 & 0.6730 & 0.0992 & 0.1728 & 0.4741 \\
+c2_gallery_75pct & 679 & 75% & M6 & 0.6680 & 0.0984 & 0.1716 & 0.4567 \\
+baseline_corrected & 899 & 100% & M3 & 0.6990 & 0.0778 & 0.1400 & 0.4650 \\
+baseline_corrected & 899 & 100% & M4 & 0.6730 & 0.0749 & 0.1348 & 0.4337 \\
+baseline_corrected & 899 & 100% & M5 & 0.7100 & 0.0790 & 0.1422 & 0.4798 \\
+baseline_corrected & 899 & 100% & M6 & 0.6960 & 0.0774 & 0.1394 & 0.4605 \\
+\bottomrule
+\end{tabular}
+\end{table}
