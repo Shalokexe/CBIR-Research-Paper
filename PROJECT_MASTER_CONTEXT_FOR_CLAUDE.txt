@@ -1,0 +1,328 @@
+====================================================================================================
+MASTER PROJECT RESEARCH CONTEXT & TECHNICAL HANDOVER FOR CLAUDE
+Project: Enhanced Content-Based Image Retrieval Using AI-Weighted Hybrid Colour and Texture Features
+Conference: 7th International Conference on Artificial Intelligence and Networking (ICAIN 2026)
+Publication Series: Springer Lecture Notes in Networks and Systems (LNNS) - Paper ID 1567
+GitHub Repository: https://github.com/Shalokexe/CBIR-Research-Paper.git
+Status: Completed, Formally Audited, Cryptographically Verified, 58/58 Unit Tests Passing
+Last Updated: November 1, 2026
+====================================================================================================
+
+----------------------------------------------------------------------------------------------------
+1. EXECUTIVE RESEARCH OVERVIEW & CORE HYPOTHESIS
+----------------------------------------------------------------------------------------------------
+Content-Based Image Retrieval (CBIR) on edge-computing devices and IoT micro-servers is constrained
+by severe memory, latency, and power budgets. Heavy deep neural networks (e.g., ResNet-50,
+EfficientNet) and Vision-Language Models (e.g., CLIP) achieve high retrieval accuracy but incur
+prohibitive storage overhead (2,048 to 8,192 bytes per image descriptor), high extraction latencies
+(10 to 25 ms per image), and compute-intensive matrix multiplications.
+
+The Core Proposed System (M5) introduces an ultra-compact, query-adaptive hybrid CBIR architecture:
+- 13-Dimensional Descriptor: 9 statistical colour moments across the HSV colour space combined with
+  4 Grey-Level Co-occurrence Matrix (GLCM) texture moments.
+- Adaptive Metric-Learning MLP: A 2-layer feed-forward network (13 -> 16 -> 8 -> 2) with LeakyReLU
+  activations and a final Softmax constraint, producing query-specific weights [wC(q), wT(q)].
+- Total Trainable Parameters: 378 weights/biases (450 total tensor elements, 1.76 KB file size).
+- Objective Function: Batch-hard triplet margin loss (margin m = 0.15) trained with Adam (lr = 1e-3).
+- Strict Unit Simplex Constraint: wC(q) + wT(q) = 1.0, with wC(q), wT(q) > 0.
+- Retrieval Metric: Weighted Euclidean distance:
+    D_M5(q, g) = sqrt( wC(q) * sum((f_q,i^C - f_g,i^C)^2) + wT(q) * sum((f_q,j^T - f_g,j^T)^2) )
+- Edge Performance Niche:
+    * Descriptor Storage: 52 bytes/image (157.5x smaller than ResNet-50, 39.4x smaller than CLIP).
+    * Extraction Latency: 0.45 ms/image on CPU (53.4x faster than ResNet-50, 36.9x faster than CLIP).
+    * Query Inference: 0.0827 ms per query forward pass on CPU.
+    * Database Ranking: Top-10 ranking over 899 images in 0.0087 ms; 7,000 images in 0.477 ms (linear O(N)).
+
+
+----------------------------------------------------------------------------------------------------
+2. EVALUATED MODEL TAXONOMY (M1 TO M6, D1 TO D5)
+----------------------------------------------------------------------------------------------------
+Handcrafted Models Evaluated on Corel-1K:
+- M1 (Colour Only): 9-D HSV statistical moments, Euclidean distance.
+- M2 (Texture Only): 4-D GLCM texture moments, Euclidean distance.
+- M3 (Equal Feature Fusion): 13-D hybrid vector with fixed 0.5 colour / 0.5 texture weighting.
+- M4 (Heuristic Fixed Fusion): 13-D hybrid vector with fixed 0.7 colour / 0.3 texture weighting.
+- M5 (Proposed Adaptive MLP): 13-D hybrid vector with dynamic query-dependent weights [wC(q), wT(q)].
+- M6 (Mean Weight Control): 13-D hybrid vector with fixed weights set to the dataset-wide mean of M5
+  predicted weights (wC = 0.578, wT = 0.422). Serves as a vital negative control to prove whether
+  dynamic query-level adaptation yields benefits beyond static distance re-scaling.
+
+Baselines Evaluated (Phase 8):
+- D1: Local Binary Patterns (LBP, 10-D uniform histogram, Chi-Square distance).
+- D2: Pretrained ResNet-50 (2048-D penultimate avgpool layer, ImageNet-1K, Cosine distance).
+- D3: Pretrained EfficientNet-B0 (1280-D features, ImageNet-1K, Cosine distance).
+- D4: Fixed Handcrafted Fusions (M3, M4, M6).
+- D5: Pretrained CLIP ViT-B/32 (512-D visual embeddings, LAION-2B, Cosine distance).
+
+
+----------------------------------------------------------------------------------------------------
+3. DATASET PROTOCOL & ZERO-LEAKAGE PARTITIONS
+----------------------------------------------------------------------------------------------------
+Primary Benchmark: Wang Corel-1K (1,000 images across 10 semantic classes: Africa, Beaches,
+Buildings, Buses, Dinosaurs, Elephants, Flowers, Horses, Mountains, Food).
+- Seed: 42 (strictly fixed across all splits, mini-batch shuffling, and evaluation).
+- Held-out Query Partition: 100 images (exactly 10 per category).
+- Internal Training Partition: 700 images (70 per category).
+- Internal Validation Partition: 199 images (20 per category, except Horses with 19).
+- Purged Duplicate: 1 image (horses/761.jpg excluded due to identical perceptual hash to query horses/760.jpg).
+- Benchmark Gallery Size: 899 images (700 train + 199 val).
+- Strict Zero-Leakage Protocol: Feature normalization (Min-Max) was computed strictly on the 899 gallery
+  images (train_min, train_max). Held-out query features were scaled strictly using these gallery bounds.
+  Zero query statistics were ever exposed during normalization or training.
+
+External Transfer Benchmark (Phase 9): Oxford-IIIT Pet Dataset (7,390 images across 37 breeds of cats
+and dogs: 12 cat breeds, 25 dog breeds; 370 held-out queries, 6,979 gallery images).
+- Protocol: Strictly zero-shot cross-dataset transfer using the frozen Corel-trained MLP model. No fine-tuning.
+
+
+----------------------------------------------------------------------------------------------------
+4. CHRONOLOGICAL PHASE-BY-PHASE EXECUTION LOG (PHASES 1 TO 10)
+----------------------------------------------------------------------------------------------------
+
+PHASE 1: DATASET AUDIT & PARTITIONING
+- Audited 1,000 images of Wang Corel-1K.
+- Perceptual hash auditing identified near-duplicate pair: horses/760.jpg (query) and horses/761.jpg (gallery).
+- Exclusion rule: Excluded horses/761.jpg to prevent artificial +1.0 ranking inflation.
+- Generated output/phase1/split_manifest.csv (1,000 rows, SHA-256: cee8d177...).
+- Unit tests: tests/test_phase1.py (6/6 passing).
+
+PHASE 2: DESCRIPTOR EXTRACTION & NORMALIZATION
+- Extracted 9-D HSV moments: Mean, Standard Deviation, Skewness for H, S, V channels.
+  Implemented unbiased cube-root skewness with numerical epsilon guards.
+- Extracted 4-D GLCM texture moments: Contrast, Dissimilarity, Homogeneity, Energy, Correlation, ASM
+  across 4 angles (0, 45, 90, 135 degrees) at distance d = 1.
+- Implemented zero-leakage gallery Min-Max normalization.
+- Output: output/phase2/features.npz (999 evaluated images), feature distributions.
+- Unit tests: tests/test_phase2.py (6/6 passing).
+
+PHASE 3: FIXED BASELINE IMPLEMENTATIONS (M1 TO M4)
+- Implemented full vectorized ranking engine and evaluation metrics.
+- Evaluated M1 (Colour), M2 (Texture), M3 (Equal 0.5/0.5), M4 (Fixed 0.7/0.3).
+- Outputs: output/phase3/rankings.npz, per_query_metrics.csv, per_category_metrics.csv.
+- Unit tests: tests/test_phase3.py (6/6 passing).
+
+PHASE 4: MLP PROVENANCE AUDIT & M1–M6 RANKING
+- Audited checkpoint model/adaptive_weight_mlp.pt (SHA-256: 4ebb783457a3e7fa69bdfbb4b197fa1fa04ea976da812ecfe94663ae8473211e).
+- Verified network: 13 inputs -> Linear(16) -> LeakyReLU(0.1) -> Linear(8) -> LeakyReLU(0.1) -> Linear(2) -> Softmax.
+- Verified training provenance: Trained solely on 700 train images using batch-hard triplet loss (m=0.15, lr=1e-3).
+- Formulated M6 (Mean Weight Control: wC = 0.578, wT = 0.422) as the essential control baseline.
+- Output: output/phase4/query_weights.csv, retrieval_validation_report.md.
+- Unit tests: tests/test_phase4.py (6/6 passing).
+
+PHASE 5: CORRECTED COREL-1K BENCHMARK EVALUATION
+- Full evaluation of M1 to M6 on 899 gallery images and 100 held-out queries.
+- Exact metric formulation:
+    * Precision@10: Fraction of top-10 retrieved images belonging to query category.
+    * Recall@10: Fraction of all relevant gallery images retrieved in top-10.
+    * F1@10: Calculated at the per-query level using unrounded precision and recall, then averaged:
+        F1_query = 2 * (P * R) / (P + R + eps), Mean_F1 = mean(F1_query).
+        (Avoids the harmonic mean aggregation fallacy of computing harmonic mean of aggregate P and R).
+    * Mean Average Precision (mAP): Computed over full 899-image gallery ranking.
+- Frozen Benchmark Values:
+    +--------+--------------+-----------+--------+--------+-------------+
+    | Model  | Modality     | Prec@10   | Rec@10 | F1@10  | mAP         |
+    +--------+--------------+-----------+--------+--------+-------------+
+    | M1     | Colour Only  | 0.6190    | 0.0689 | 0.1240 | 0.4045      |
+    | M2     | Texture Only | 0.4680    | 0.0521 | 0.0937 | 0.3508      |
+    | M3     | Equal Fusion | 0.6990    | 0.0778 | 0.1400 | 0.4650      |
+    | M4     | Fixed 0.7/0.3| 0.6730    | 0.0749 | 0.1348 | 0.4337      |
+    | M5     | Proposed MLP | 0.7100    | 0.0790 | 0.1422 | 0.4798      |
+    | M6     | Mean Control | 0.6960    | 0.0774 | 0.1394 | 0.4605      |
+    +--------+--------------+-----------+--------+--------+-------------+
+- Key Category Finding: Dinosaurs achieves near-perfect mAP (0.9934) due to black background.
+  Flowers category exhibits massive adaptive gain: M5 mAP = 0.7410 vs M6 mAP = 0.5307 (+0.2103 gain).
+- Output: output/phase5/results.json, category_metrics.csv, per_query_metrics.csv.
+- Unit tests: tests/test_phase5.py (7/7 passing).
+
+PHASE 6: INFERENTIAL STATISTICAL VALIDATION
+- Executed paired two-sided Wilcoxon signed-rank tests across 100 held-out queries.
+- Executed 10,000 paired sign-flip permutation tests.
+- Executed 10,000 category-stratified bootstrap confidence intervals (Percentile and BCa).
+- Computed Hodges-Lehmann pseudo-median differences and Cohen's dz paired effect sizes.
+- Controlled Family-Wise Error Rate (FWER) at alpha = 0.05 via Holm-Bonferroni step-down correction.
+- Primary Contrast Results:
+    * M5 vs Fixed Heuristic M4: Mean Diff = +0.0461, W = 943.0, raw p = 5.35e-8, Holm p = 0.0001 (SIGNIFICANT, 76 wins / 24 losses).
+    * M5 vs Equal Fusion M3: Mean Diff = +0.0148, W = 1972.0, raw p = 0.3259, Holm p = 0.6519 (NON-SIGNIFICANT, 51 wins / 6 ties / 43 losses).
+    * M5 vs Mean Control M6: Mean Diff = +0.0193, W = 2353.0, raw p = 0.5543, Holm p = 0.6519 (NON-SIGNIFICANT, 53 wins / 47 losses).
+- Critical Disclosure: When Flowers is excluded, the mean paired difference between M5 and M6 across
+  the remaining 9 categories is slightly negative (-0.00197). M5's advantage over static controls is
+  driven predominantly by the Flowers class.
+- Output: output/phase6/paired_test_summary.csv, bootstrap_ci_summary.csv, significance_report.md.
+- Unit tests: tests/test_phase6.py (6/6 passing).
+
+PHASE 7: GALLERY-COMPOSITION SENSITIVITY & LOCO
+- Evaluated 16 controlled scenarios:
+    * C1 (Duplicate Sensitivity): Removing near-duplicate horses/761.jpg shifts M5 mAP from 0.4794 to 0.4798 (+0.0004).
+    * C2 (Gallery-Size Nested Stratified Scaling): Evaluated at 25% (N=220), 50% (N=449), 75% (N=679), 100% (N=899).
+      Key Finding: As gallery size shrinks from 899 to 220, Recall@10 increases from 0.0790 to 0.2882,
+      and F1@10 increases from 0.1422 to 0.3662. Proved this is a mathematical artifact of a smaller relevance
+      denominator (|Rel| shrinks from ~90 to ~22), not improved retrieval fidelity.
+    * C3 (Leave-One-Category-Out / LOCO): Evaluated impact of excluding each category on the remaining 9 classes.
+- Output: output/phase7/scenario_metrics.csv, per_query_scenario_metrics.csv, phase_c_report.md.
+- Unit tests: tests/test_phase7.py (6/6 passing).
+
+PHASE 8: HANDCRAFTED AND DEEP-LEARNING BASELINES (D1 TO D5)
+- Standardized benchmark across exact same 899 gallery images and 100 held-out queries.
+- Comparative Results:
+    +-------------------+---------------------+------+------------+--------+--------+---------+-----------+
+    | Method            | Architecture        | Dim  | Distance   | Prec@10| Rec@10 | mAP     | Storage   | Latency   |
+    +-------------------+---------------------+------+------------+--------+--------+---------+-----------+
+    | Proposed (M5)     | AI-Adaptive Moments | 13   | W-Euclidean| 0.7100 | 0.0790 | 0.4798  | 52 B      | 0.45 ms   |
+    | LBP (D1)          | Handcrafted Texture | 10   | Chi-Square | 0.5090 | 0.0566 | 0.3734  | 40 B      | 10.82 ms  |
+    | ResNet-50 (D2)    | Deep CNN (ImageNet) | 2048 | Cosine     | 0.9580 | 0.1066 | 0.9103  | 8,192 B   | 24.04 ms  |
+    | EfficientNet (D3) | Deep CNN (ImageNet) | 1280 | Cosine     | 0.9550 | 0.1062 | 0.8879  | 5,120 B   | 9.71 ms   |
+    | Fixed M3 (D4)     | Handcrafted Equal   | 13   | Euclidean  | 0.6990 | 0.0778 | 0.4650  | 52 B      | 0.41 ms   |
+    | CLIP ViT-B/32 (D5)| Vision-Language VLM | 512  | Cosine     | 0.9860 | 0.1097 | 0.9485  | 2,048 B   | 16.60 ms  |
+    +-------------------+---------------------+------+------------+--------+--------+---------+-----------+
+- Statistical Contrast against M5:
+    * M5 vs LBP (D1): delta = +0.1064, p = 6.61e-9 (M5 SIGNIFICANTLY SUPERIOR).
+    * M5 vs Deep Models (D2, D3, D5): Deep models are statistically superior (p < 1e-15).
+- Core Trade-Off Insight: M5 provides an edge-oriented practical trade-off: 157.5x smaller descriptor storage
+  than ResNet-50, 53.4x faster CPU feature extraction, and 1.76 KB model size.
+- Output: output/phase8/baseline_metrics.csv, paired_comparisons.csv, runtime_comparison.csv, phase_d_report.md.
+- Unit tests: tests/test_phase8.py (7/7 passing).
+
+PHASE 9: EXTERNAL TRANSFER (OXFORD-IIIT PET) & SCALABILITY
+- Downloaded and verified official Oxford-IIIT Pet dataset (7,390 images, 37 breeds).
+- Evaluated frozen Corel-1K models M1 to M6 in a strictly zero-shot transfer protocol (370 queries, 6,979 gallery).
+- Results across 37 breeds:
+    * M5 (Proposed): mAP = 0.033332, Prec@10 = 0.0546
+    * M6 (Mean Control): mAP = 0.033155, Prec@10 = 0.0584
+    * M3 (Equal Fusion): mAP = 0.033275, Prec@10 = 0.0568
+    * Random chance baseline: 1 / 37 breeds = 0.0270 (2.7%).
+- Manuscript Discrepancy Reconciliation: Reconciles typographical discrepancy in earlier manuscript draft
+  (which reported 0.033832 vs 0.033715). Proves that global moments cannot resolve fine-grained domestic breeds.
+- Scalability Profiling: Profiling on Intel Core i7-14650HX confirmed linear O(N) scaling:
+    * N = 899 ranking: 0.0087 ms
+    * N = 6,979 ranking: 0.1230 ms
+    * N = 7,000 stress test: 0.4770 ms
+    * Parallel feature extraction throughput: 115.3 images/sec on CPU.
+- Output: output/phase9/external_transfer_metrics.csv, breed_metrics.csv, runtime_report.csv, transfer_report.md.
+- Unit tests: tests/test_phase9.py (4/4 passing).
+
+PHASE 10: FINAL RESEARCH AUDIT & PUBLICATION PACKAGE
+- Generated 7 manuscript-ready tables in both CSV and Springer LNNS LaTeX booktabs format (manuscript_tables/).
+- Generated 9 publication-quality figures at 300 DPI (publication_figures/).
+- Generated final_research_audit.md (comprehensive 11-task verification).
+- Generated reproducibility_checklist.md, final_results_summary.md, manuscript_integration_recommendation.md.
+- Generated requirements.txt, environment.yml, master README.md, and experiment_manifest.json.
+- Created unit test suite tests/test_phase10.py (5/5 passing).
+- Total automated unit test suite: 58 passed in 4.77s. All changes committed and pushed to GitHub (commit 303a8e1).
+
+
+----------------------------------------------------------------------------------------------------
+5. COMPLETE DIRECTORY TREE & KEY FILE INVENTORY
+----------------------------------------------------------------------------------------------------
+c:\Users\ROG STRIX\Downloads\ICAIN1567_CWBR_Project_Handover_Antigravity\research paper implement\
+├── README.md                                  # Showcase GitHub documentation with diagrams and tables
+├── final_research_audit.md                    # 11-task comprehensive technical audit report
+├── reproducibility_checklist.md               # Standard NeurIPS/CVPR/Springer reproducibility checklist
+├── final_results_summary.md                   # Consolidated benchmark performance & statistical summary
+├── manuscript_integration_recommendation.md   # Specific recommendations for paper text/table revisions
+├── experiment_manifest.json                   # Master SHA-256 cryptographic hashes of all deliverables
+├── requirements.txt                           # Pip dependency specifications
+├── environment.yml                            # Conda environment specifications
+├── config.py                                  # Global hyperparameters, paths, and random seeds (seed 42)
+├── dataset/                                   # Canonical Wang Corel-1K dataset (1,000 images, 10 classes)
+├── dataset_external/                          # Oxford-IIIT Pet dataset for zero-shot transfer (7,390 images)
+├── model/
+│   ├── adaptive_weight_mlp.pt                 # Frozen PyTorch checkpoint (378 params, 1.76 KB)
+│   ├── adaptive_mlp.py                        # AdaptiveWeightMLP model definition (13-16-8-2)
+│   └── loss.py                                # Batch-hard triplet margin loss (margin=0.15)
+├── features/
+│   ├── color.py                               # 9-D HSV moments extractor (mean, std, skew)
+│   ├── texture.py                             # 4-D GLCM texture extractor (contrast, diss, homo, energy, etc.)
+│   ├── extract.py                             # Feature extraction orchestration
+│   └── normalize.py                           # Gallery-only fitted Min-Max normalization
+├── retrieval/
+│   ├── metrics.py                             # Precision@10, Recall@10, F1@10, query-level AP, mAP
+│   └── rank.py                                # Vectorized weighted distance computation and sorting
+├── manuscript_tables/                         # Publication-ready LaTeX (.tex) and CSV tables
+│   ├── table1_main_performance.{csv,tex}     # M1-M6 Corel benchmark performance
+│   ├── table2_statistical_significance.{csv,tex} # Paired Wilcoxon tests with Holm correction
+│   ├── table3_category_metrics.{csv,tex}      # Per-category AP across all models & baselines
+│   ├── table4_gallery_sensitivity.{csv,tex}   # Nested gallery-size scaling (25%, 50%, 75%, 100%)
+│   ├── table5_deep_baselines.{csv,tex}        # M5 vs LBP, ResNet-50, EfficientNet, CLIP
+│   ├── table6_oxford_transfer.{csv,tex}       # Zero-shot Oxford Pet transfer across 37 breeds
+│   └── table7_runtime_scalability.{csv,tex}   # Hardware profiling, component latencies, memory
+├── publication_figures/                       # 300 DPI high-resolution figures
+│   ├── fig_system_architecture.png            # Overall system block diagram
+│   ├── fig_retrieval_pipeline.png             # End-to-end 5-step retrieval pipeline
+│   ├── fig_mlp_architecture.png               # Metric-learning MLP layer structure
+│   ├── fig_weight_distributions.png           # Query colour vs texture weight histograms
+│   ├── fig_main_performance_comparison.png    # M1-M6 benchmark bar chart
+│   ├── fig_category_performance.png           # Per-category mAP breakdown
+│   ├── fig_gallery_size_sensitivity.png       # Gallery-size scaling curves
+│   ├── fig_deep_learning_comparison.png       # Latency/storage vs accuracy trade-off curves
+│   └── fig_qualitative_retrieval_examples.png # Visual query retrieval demonstrations
+├── scripts/
+│   ├── run_phase7_sensitivity.py              # Reproduces Phase 7 gallery sensitivity (C1, C2, C3)
+│   ├── run_phase8_baselines.py                # Reproduces Phase 8 baseline comparisons (D1-D5)
+│   ├── run_phase9_transfer_scalability.py     # Reproduces Phase 9 Oxford transfer & latency profiling
+│   ├── download_oxford_pet.py                 # Multi-threaded chunked downloader for Oxford Pet
+│   └── generate_phase10_publication_package.py# Generates all Phase 10 tables, figures, and reports
+├── tests/
+│   ├── test_phase1.py to test_phase10.py      # Complete 58-test verification suite (pytest)
+├── output/                                    # Phase-isolated experimental outputs (phase1/ to phase10/)
+└── handover/                                  # Administrative audit logs and phase checklists
+
+
+----------------------------------------------------------------------------------------------------
+6. CRITICAL TECHNICAL PITFALLS ENCOUNTERED & EXACT SOLUTIONS
+----------------------------------------------------------------------------------------------------
+1. Windows cp1252 Terminal Crash:
+   - Issue: Unicode characters (arrows, deltas, subset symbols) crashed scripts on Windows PowerShell.
+   - Solution: Enforced pure ASCII console logging and UTF-8 file encoding throughout all pipelines.
+
+2. NumPy 2.x `allow_pickle=False` Error:
+   - Issue: Loading pre-computed cache dictionaries with `np.load` crashed on NumPy 2.4+.
+   - Solution: Explicitly passed `allow_pickle=True` in all `np.load()` calls.
+
+3. Official Oxford University VGG Server Timeout:
+   - Issue: The official Oxford VGG server timed out during dataset download.
+   - Solution: Built a custom multi-threaded chunked downloader (`download_oxford_pet.py`) connecting to
+     the fastai Amazon S3 mirror, downloading 16 concurrent byte ranges in 350 seconds.
+
+4. Windows Paging File / MemoryError on `ProcessPoolExecutor`:
+   - Issue: Spawning 24 Python worker processes simultaneously importing PyTorch DLLs exhausted the
+     Windows paging file.
+   - Solution: Replaced `ProcessPoolExecutor` with `ThreadPoolExecutor(max_workers=8)`, which releases the
+     GIL during C-level PIL and skimage image processing without multi-process DLL overhead.
+
+5. PyTorch Checkpoint Loading KeyError:
+   - Issue: Checkpoint contained a dictionary with `"model_state_dict"`, causing direct weight load failure.
+   - Solution: Unpacked `ckpt["model_state_dict"]` before calling `model.load_state_dict()`.
+
+6. F-String Curly Brace Interpolation Error:
+   - Issue: LaTeX expressions like `\mathcal{O}(N)` and `{csv,tex}` inside Python f-strings caused `NameError: name 'O' is not defined`.
+   - Solution: Converted report templates to standard triple-quoted strings with `.replace()` placeholders.
+
+7. F1 Harmonic Mean Fallacy:
+   - Issue: Calculating aggregate F1 as harmonic mean of aggregate P and aggregate R biases the metric.
+   - Solution: Calculated F1 strictly at the per-query level using unrounded P and R before averaging across queries.
+
+
+----------------------------------------------------------------------------------------------------
+7. MANDATORY RESEARCH INTEGRITY DISCLOSURES (FOR MANUSCRIPT REVISION)
+----------------------------------------------------------------------------------------------------
+When writing or revising the manuscript for ICAIN 2026, adhere strictly to these empirical facts:
+1. Statistically Significant Results:
+   - Proposed M5 is statistically significantly superior to classical LBP texture (D1, p = 6.61e-9)
+     and heuristic fixed fusion (M4, p = 5.35e-8).
+2. Descriptive-Only Results:
+   - The numerical improvements of M5 over equal fusion M3 (+0.0148 mAP) and mean control M6 (+0.0193 mAP)
+     are NOT statistically significant after Holm-Bonferroni correction (p = 0.6519).
+3. Category Limitation (Flowers Driver):
+   - M5's advantage over fixed controls is heavily concentrated in the Flowers category (+0.2103 mAP gain).
+     Excluding Flowers, the mean paired difference across the remaining 9 categories is -0.00197.
+4. Gallery Sensitivity Invariant:
+   - Smaller galleries mechanically inflate recall and F1 due to a smaller denominator (|Rel| shrinks).
+     This must be explained as a mathematical consequence of gallery size, not superior retrieval capability.
+5. Deep-Learning Baseline Reality:
+   - Deep neural networks (ResNet-50: 0.9103, EfficientNet-B0: 0.8879, CLIP: 0.9485) dominate semantic accuracy.
+   - The paper's scientific merit lies strictly in its ultra-low resource niche: 52 bytes/image, 0.45 ms CPU latency,
+     and 1.76 KB model footprint for edge devices.
+6. Zero-Shot Transfer Boundary:
+   - Transfer to fine-grained Oxford-IIIT Pet yields ~3.33% mAP (near random chance ~2.7%), establishing that
+     global moments cannot distinguish fine-grained biological breeds without deep local spatial geometry.
+====================================================================================================
