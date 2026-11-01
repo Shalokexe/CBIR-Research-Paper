@@ -326,3 +326,4 @@ When writing or revising the manuscript for ICAIN 2026, adhere strictly to these
    - Transfer to fine-grained Oxford-IIIT Pet yields ~3.33% mAP (near random chance ~2.7%), establishing that
      global moments cannot distinguish fine-grained biological breeds without deep local spatial geometry.
 ====================================================================================================
+

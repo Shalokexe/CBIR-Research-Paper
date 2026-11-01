@@ -1,29 +1,38 @@
-# START HERE — ICAIN 2026 CBIR Project Handover
+# START HERE — ICAIN 2026 CBIR Project Master Handover
 
 **Project:** ICAIN 2026, Springer LNNS  
 **Paper ID:** 1567  
 **Title:** Enhanced Content-Based Image Retrieval Using AI-Weighted Hybrid Colour and Texture Features  
-**Snapshot supplied:** `research paper implement(1).zip`  
-**Current code snapshot:** implementation through Phase 4 (M1–M6 retrieval and evaluation).
+**Current Code Snapshot:** Phases 1 through 10 fully completed, audited, and verified.
 
-## Mandatory first action for the new Antigravity agent
+---
 
-1. Read `handover/PROJECT_CONTEXT_MASTER.md` completely.
-2. Read `handover/AGENT_RULES.md` and `handover/PHASE_STATUS.md`.
-3. Inspect the existing repository and compare it with the output register. Do not overwrite or regenerate existing outputs.
-4. Start by auditing the Phase 4 training provenance gap described in the master context. The ZIP contains an MLP checkpoint and inference/evaluation code, but no evident MLP training script or training log. Do not claim training reproducibility until this is resolved.
-5. Report the audit findings and proposed next action to the user. Do not begin a new phase, retrain, change methodology, or edit manuscript/results until the user approves.
+## 🚨 MANDATORY FIRST ACTION FOR THE ANTIGRAVITY AGENT
 
-## Project state at handover
+1. **Read `ANTIGRAVITY_AGENT_ONBOARDING_INSTRUCTIONS.md` in the project root immediately.**
+   It contains your complete onboarding directive, system walkthrough instructions, mathematical formulation, frozen benchmark values, and research integrity rules.
+2. **Execute the verification walkthrough:**
+   - Run `pytest tests/` (all 58 automated unit tests must pass).
+   - Inspect the 7 publication-ready tables in `manuscript_tables/`.
+   - Inspect the 9 publication-quality figures (300 DPI) in `publication_figures/`.
+   - Inspect the technical audit reports: `final_research_audit.md`, `reproducibility_checklist.md`, and `final_results_summary.md`.
+3. **DO NOT overwrite, retrain, or regenerate existing frozen outputs.** All experimental results under `output/phase1/` through `output/phase10/` are immutable and cryptographically audited in `experiment_manifest.json`.
+4. **Current Workflow Focus:** Assist the user with the final manuscript writeup and revision following `manuscript_integration_recommendation.md`.
 
-- Phase 1: dataset audit and corrected split implemented.
-- Phase 2: 13D HSV+GLCM feature extraction and gallery-fitted normalization implemented.
-- Phase 3: M1–M4 baselines implemented and reference-parity checked.
-- Phase 4: M1–M6 retrieval/evaluation outputs and MLP inference checkpoint are present.
-- Phase 4 retrieval outputs report M5 mAP 0.479794 and M6 mAP 0.460536.
-- **Important:** Phase 4's report is not proof that MLP training can be reproduced. Training code/logs/metadata need audit.
-- Next intended workflow: finish Phase 4 provenance audit → user approval → Phase 5 statistical validation → user approval → Phase 6 publication figures/report and manuscript revision.
+---
 
-## Preserve the evidence
+## Project State at Handover (Phases 1 to 10 Complete)
 
-All existing artifacts under `output/phase1` through `output/phase4`, `figures/`, `model/`, and source files are immutable baseline evidence. If any rerun is approved, create a new timestamped run directory and update the output register; never silently overwrite the existing run.
+- **Phase 1:** Dataset audit & corrected split (899 gallery, 100 queries, `horses/761.jpg` purged duplicate).
+- **Phase 2:** 13-D HSV + GLCM descriptor extraction and gallery-only Min-Max normalization.
+- **Phase 3:** M1–M4 fixed baselines implemented and verified.
+- **Phase 4:** MLP training provenance audited and verified (`adaptive_weight_mlp.pt`, 378 parameters).
+- **Phase 5:** Corrected Corel-1K benchmark evaluation (M1–M6, M5 mAP = 0.4798, P@10 = 0.7100).
+- **Phase 6:** Inferential statistical validation (Wilcoxon tests, sign-flip permutations, bootstrap CIs, Holm correction).
+- **Phase 7:** Gallery-composition sensitivity & Leave-One-Category-Out (LOCO) analysis.
+- **Phase 8:** Handcrafted and deep-learning baselines comparison (D1 LBP, D2 ResNet-50, D3 EfficientNet, D5 CLIP).
+- **Phase 9:** External zero-shot transfer on Oxford-IIIT Pet (37 breeds) & computational scalability profiling.
+- **Phase 10:** Final research audit, 7 manuscript tables (LaTeX + CSV), 9 publication figures (300 DPI), and master manifests.
+
+All 58 unit tests passing via `pytest tests/`.
+Refer to `ANTIGRAVITY_AGENT_ONBOARDING_INSTRUCTIONS.md` for full instructions.
