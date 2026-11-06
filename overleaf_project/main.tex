@@ -28,7 +28,7 @@
 \usepackage{algpseudocode}
 \usepackage{listings}
 
-%% Ensure figures inside Figures/ folder are discovered automatically
+%% Automatically look inside your Overleaf Figures/ directory
 \graphicspath{{Figures/}{./}}
 
 \raggedbottom
@@ -138,19 +138,37 @@ The Wang Corel-1K dataset (1,000 images, 10 categories: Africa, Beaches, Buildin
 Cross-dataset transfer was evaluated zero-shot on the official Oxford-IIIT Pet dataset (7,390 images, 37 cat and dog breeds; 370 held-out queries, 6,979 gallery images) without any retraining or adaptation.
 
 \subsection{Evaluated Configurations and Baselines}
-Ten retrieval configurations are compared across the identical 899-image gallery:
-\begin{itemize}
-    \item \textbf{M1 (Colour Only):} 9-D HSV moments under Euclidean distance.
-    \item \textbf{M2 (Texture Only):} 4-D GLCM moments under Euclidean distance.
-    \item \textbf{M3 (Equal Fusion):} 13-D hybrid vector with fixed equal weights (0.5 / 0.5).
-    \item \textbf{M4 (Heuristic Fixed):} 13-D hybrid vector with fixed weights (0.7 colour / 0.3 texture).
-    \item \textbf{M5 (Proposed Adaptive):} 13-D hybrid vector with MLP-predicted dynamic weights $[w_C(q), w_T(q)]$.
-    \item \textbf{M6 (Mean Control):} 13-D hybrid vector with fixed distance weights set to M5's dataset-wide mean ($\bar{w}_C = 0.5784, \bar{w}_T = 0.4216$), isolating dynamic adaptation from static scaling.
-    \item \textbf{D1 (LBP):} Handcrafted 10-D uniform LBP histogram under Chi-Square distance.
-    \item \textbf{D2 (ResNet-50):} Pretrained 2048-D penultimate avgpool features under Cosine distance.
-    \item \textbf{D3 (EfficientNet-B0):} Pretrained 1280-D deep features under Cosine distance.
-    \item \textbf{D5 (CLIP ViT-B/32):} Pretrained 512-D visual embeddings under Cosine distance.
-\end{itemize}
+All six handcrafted configurations and four baseline models are summarized systematically in Table~\ref{tab:configurations}. These are evaluated on the 100 held-out queries across the identical 899-image gallery:
+
+\begin{table}[htbp]
+\centering
+\caption{Systematic overview of evaluated CBIR configurations and baseline models.}
+\label{tab:configurations}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{6pt}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{clccll}
+\toprule
+\textbf{Model ID} & \textbf{Modality} & \textbf{Dim} & \textbf{Feature Components} & \textbf{Weighting / Fusion Strategy} & \textbf{Distance Metric} \\
+\midrule
+M1 & Colour Only & 9 & 9-D HSV statistical moments & Single modality ($w_C = 1.0$) & Euclidean ($L_2$) \\
+M2 & Texture Only & 4 & 4-D GLCM texture moments & Single modality ($w_T = 1.0$) & Euclidean ($L_2$) \\
+\addlinespace[3pt]
+M3 & Hybrid & 13 & HSV + GLCM concatenated & Fixed equal fusion ($0.5\,C + 0.5\,T$) & Euclidean ($L_2$) \\
+M4 & Heuristic & 13 & HSV + GLCM concatenated & Fixed heuristic ($0.7\,C + 0.3\,T$) & Euclidean ($L_2$) \\
+\addlinespace[3pt]
+\textbf{M5} & \textbf{AI-Adaptive} & \textbf{13} & \textbf{HSV + GLCM decoupled} & \textbf{MLP-predicted dynamic ($w_C(q) + w_T(q) = 1$)} & \textbf{Weighted $L_2$} \\
+\addlinespace[3pt]
+M6 & Fixed Control & 13 & HSV + GLCM decoupled & Fixed dataset-mean ($0.578\,C + 0.422\,T$) & Weighted $L_2$ \\
+\midrule
+D1 & Texture (LBP) & 10 & 10-D Uniform LBP histogram & Classical texture baseline & Chi-Square ($\chi^2$) \\
+D3 & Deep CNN & 1280 & EfficientNet-B0 (ImageNet) & Pretrained frozen deep embedding & Cosine Distance \\
+D2 & Deep CNN & 2048 & ResNet-50 avgpool (ImageNet) & Pretrained frozen deep embedding & Cosine Distance \\
+D5 & Foundation & 512 & CLIP ViT-B/32 (LAION-2B) & Zero-shot vision-language embedding & Cosine Distance \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
 
 \subsection{Evaluation Metrics and Statistical Testing}
 Performance is evaluated via Precision@10, Recall@10, F1@10, and mean Average Precision (mAP). F1@10 is computed per query using unrounded precision and recall prior to averaging: $F1_q = 2 \cdot (P_q \cdot R_q)/(P_q + R_q + \epsilon)$. 
@@ -162,21 +180,26 @@ Paired two-sided Wilcoxon signed-rank tests supported by 10,000 sign-flip permut
 \subsection{Overall Retrieval Performance on Corel-1K}
 Table~\ref{tab:main_results} and Fig.~\ref{fig:main_perf} report retrieval performance across the six handcrafted configurations on the Corel-1K benchmark. Proposed M5 achieved the highest score across every metric: Precision@10 of 0.7100, Recall@10 of 0.0790, F1@10 of 0.1422, and full-gallery mAP of 0.4798.
 
-\begin{table}[!t]
+\begin{table}[htbp]
 \centering
 \caption{Retrieval performance comparison on the Corel-1K benchmark (899 gallery images, 100 held-out queries).}
 \label{tab:main_results}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{8pt}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{llccccccc}
+\begin{tabular}{llcccccc}
 \toprule
-\textbf{Model} & \textbf{Fusion Strategy} & \textbf{Feature Space} & \textbf{Dim} & \textbf{P@10} & \textbf{R@10} & \textbf{F1@10} & \textbf{mAP} & \textbf{Latency} \\
+\textbf{Model} & \textbf{Fusion Strategy} & \textbf{Feature Space} & \textbf{Dim} & \textbf{P@10} & \textbf{R@10} & \textbf{F1@10} & \textbf{mAP} \\
 \midrule
-M1 & Colour Only & HSV Moments & 9 & 0.6190 & 0.0689 & 0.1240 & 0.4045 & 0.202 ms \\
-M2 & Texture Only & GLCM Moments & 4 & 0.4680 & 0.0521 & 0.0937 & 0.3508 & 0.115 ms \\
-M3 & Equal Fusion (0.5/0.5) & Fixed Hybrid & 13 & 0.6990 & 0.0778 & 0.1400 & 0.4650 & 0.408 ms \\
-M4 & Heuristic Fixed (0.7/0.3) & Fixed Hybrid & 13 & 0.6730 & 0.0749 & 0.1348 & 0.4337 & 0.134 ms \\
-\textbf{M5} & \textbf{Proposed Adaptive} & \textbf{AI-Weighted} & \textbf{13} & \textbf{0.7100} & \textbf{0.0790} & \textbf{0.1422} & \textbf{0.4798} & \textbf{0.365 ms} \\
-M6 & Mean Weight Control & Fixed Distance & 13 & 0.6960 & 0.0774 & 0.1394 & 0.4605 & 0.343 ms \\
+M1 & Colour Only & HSV Moments & 9 & 0.6190 & 0.0689 & 0.1240 & 0.4045 \\
+M2 & Texture Only & GLCM Moments & 4 & 0.4680 & 0.0521 & 0.0937 & 0.3508 \\
+\addlinespace[4pt]
+M3 & Equal Fusion (0.5/0.5) & Fixed Hybrid & 13 & 0.6990 & 0.0778 & 0.1400 & 0.4650 \\
+M4 & Heuristic Fixed (0.7/0.3) & Fixed Hybrid & 13 & 0.6730 & 0.0749 & 0.1348 & 0.4337 \\
+\addlinespace[4pt]
+\textbf{M5} & \textbf{Proposed Adaptive} & \textbf{AI-Weighted} & \textbf{13} & \textbf{0.7100} & \textbf{0.0790} & \textbf{0.1422} & \textbf{0.4798} \\
+\addlinespace[4pt]
+M6 & Mean Weight Control & Fixed Distance & 13 & 0.6960 & 0.0774 & 0.1394 & 0.4605 \\
 \bottomrule
 \end{tabular}%
 }
@@ -194,20 +217,24 @@ Colour moments alone (M1, mAP 0.4045) exhibit greater class discrimination than 
 \subsection{Inferential Statistical Validation}
 Table~\ref{tab:stat_sig} summarizes the paired inferential statistical contrasts across the 100 queries against Proposed M5 under family-wise Holm--Bonferroni correction.
 
-\begin{table*}[!t]
+\begin{table*}[htbp]
 \centering
 \caption{Paired inferential statistical contrasts against Proposed M5 across 100 queries under Holm--Bonferroni correction.}
 \label{tab:stat_sig}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{8pt}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccccc}
+\begin{tabular}{lccccccc}
 \toprule
 \textbf{Paired Contrast} & \textbf{Mean $\Delta$} & \textbf{Median $\Delta$} & \textbf{95\% Bootstrap CI} & \textbf{Wilcoxon $W$} & \textbf{Holm $p$} & \textbf{Cohen $d_z$} & \textbf{W / T / L} \\
 \midrule
 M5 vs CLIP ViT-B/32 (D5) & $-0.4687$ & $-0.5263$ & $[-0.5197, -0.4177]$ & 24.0 & \textbf{0.0000}* & $-1.82$ & 2 / 2 / 96 \\
 M5 vs ResNet-50 (D2) & $-0.4305$ & $-0.4882$ & $[-0.4830, -0.3781]$ & 102.0 & \textbf{0.0000}* & $-1.63$ & 8 / 0 / 92 \\
 M5 vs EfficientNet-B0 (D3) & $-0.4081$ & $-0.4611$ & $[-0.4580, -0.3582]$ & 71.0 & \textbf{0.0000}* & $-1.62$ & 7 / 0 / 93 \\
+\midrule
 M5 vs Uniform LBP (D1) & $+0.1064$ & $+0.1095$ & $[+0.0703, +0.1426]$ & 838.0 & \textbf{0.0000}* & $+0.58$ & 81 / 0 / 19 \\
 M5 vs Fixed Heuristic (M4) & $+0.0461$ & $+0.0080$ & $[+0.0236, +0.0687]$ & 943.0 & \textbf{0.0001}* & $+0.41$ & 76 / 0 / 24 \\
+\addlinespace[4pt]
 M5 vs Equal Fusion (M3) & $+0.0148$ & $+0.0002$ & $[+0.0017, +0.0278]$ & 1972.0 & 0.6519 & $+0.22$ & 51 / 6 / 43 \\
 M5 vs Mean Control (M6) & $+0.0193$ & $+0.0002$ & $[+0.0041, +0.0344]$ & 2353.0 & 0.6519 & $+0.25$ & 53 / 0 / 47 \\
 \bottomrule
@@ -218,29 +245,34 @@ M5 vs Mean Control (M6) & $+0.0193$ & $+0.0002$ & $[+0.0041, +0.0344]$ & 2353.0 
 The inferential tests establish that M5 is statistically significantly superior to classical LBP texture ($p < 0.0001$, 81 wins vs 19 losses) and heuristic fixed fusion M4 ($p = 0.0001$, 76 wins vs 24 losses). Conversely, against equal fusion M3 (Holm $p = 0.6519$) and mean control M6 (Holm $p = 0.6519$), the differences do not reach statistical significance after family-wise error rate control. M5 outperformed M6 on 53 queries while underperforming on 47. Thus, the aggregate improvement of M5 over M3 and M6 is formally classified as descriptive.
 
 \subsection{Category-Level Decomposition and Qualitative Proof}
-Table~\ref{tab:cat_breakdown} disaggregates Average Precision across all 10 Corel categories.
+Table~\ref{tab:cat_breakdown} disaggregates Average Precision across all 10 Corel categories with clear category clustering and descriptive separators.
 
-\begin{table*}[!t]
+\begin{table*}[htbp]
 \centering
 \caption{Per-category Average Precision breakdown across handcrafted models (M1--M6), classical texture (D1), and deep visual representations (D2, D3, D5).}
 \label{tab:cat_breakdown}
+\renewcommand{\arraystretch}{1.25}
+\setlength{\tabcolsep}{6pt}
 \resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccccccc}
+\begin{tabular}{lcccccc|cccc}
 \toprule
-\textbf{Category} & \textbf{M1 (Col)} & \textbf{M2 (Tex)} & \textbf{M3 (Eq)} & \textbf{M4 (Heur)} & \textbf{M5 (Prop)} & \textbf{M6 (Ctrl)} & \textbf{D1 (LBP)} & \textbf{D3 (EffNet)} & \textbf{D2 (ResNet)} & \textbf{D5 (CLIP)} \\
+\textbf{Category} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} & \textbf{M5} & \textbf{M6} & \textbf{D1} & \textbf{D3} & \textbf{D2} & \textbf{D5} \\
+ & (Colour) & (Texture) & (Equal) & (Fixed) & (Adaptive) & (Control) & (LBP) & (EffNet) & (ResNet) & (CLIP) \\
 \midrule
 Africa & 0.3703 & 0.2831 & 0.4485 & 0.4150 & 0.4491 & 0.4491 & 0.3012 & 0.8654 & 0.8891 & 0.9320 \\
+Dinosaurs & 0.9850 & 0.8950 & 0.9934 & 0.9910 & \textbf{0.9934} & 0.9934 & 0.9120 & 0.9980 & 0.9990 & 1.0000 \\
+Elephants & 0.2810 & 0.2450 & 0.3210 & 0.2980 & 0.3205 & 0.3212 & 0.2540 & 0.8310 & 0.8650 & 0.9100 \\
+Horses & 0.3610 & 0.3120 & 0.4320 & 0.3950 & 0.4312 & 0.4320 & 0.3320 & 0.8740 & 0.9010 & 0.9420 \\
+\addlinespace[4pt]
 Beaches & 0.3150 & 0.2980 & 0.3662 & 0.3421 & 0.3653 & 0.3670 & 0.3204 & 0.8412 & 0.8710 & 0.9125 \\
 Buildings & 0.3210 & 0.3105 & 0.3891 & 0.3540 & 0.3884 & 0.3890 & 0.3341 & 0.8520 & 0.8845 & 0.9240 \\
 Buses & 0.3950 & 0.3610 & 0.4720 & 0.4310 & 0.4715 & 0.4721 & 0.3810 & 0.8920 & 0.9140 & 0.9610 \\
-Dinosaurs & 0.9850 & 0.8950 & 0.9934 & 0.9910 & \textbf{0.9934} & 0.9934 & 0.9120 & 0.9980 & 0.9990 & 1.0000 \\
-Elephants & 0.2810 & 0.2450 & 0.3210 & 0.2980 & 0.3205 & 0.3212 & 0.2540 & 0.8310 & 0.8650 & 0.9100 \\
-Flowers & 0.4520 & 0.3210 & 0.5307 & 0.4890 & \textbf{0.7410}* & 0.5307 & 0.3510 & 0.9120 & 0.9340 & 0.9750 \\
-Horses & 0.3610 & 0.3120 & 0.4320 & 0.3950 & 0.4312 & 0.4320 & 0.3320 & 0.8740 & 0.9010 & 0.9420 \\
 Mountains & 0.2810 & 0.2310 & 0.3220 & 0.2910 & 0.3210 & 0.3220 & 0.2410 & 0.8120 & 0.8450 & 0.9210 \\
+\addlinespace[4pt]
+Flowers & 0.4520 & 0.3210 & 0.5307 & 0.4890 & \textbf{0.7410}* & 0.5307 & 0.3510 & 0.9120 & 0.9340 & 0.9750 \\
 Food & 0.2830 & 0.2510 & 0.3660 & 0.3300 & 0.3662 & 0.3670 & 0.2670 & 0.8150 & 0.8470 & 0.9110 \\
 \midrule
-\textbf{Mean (mAP)} & 0.4045 & 0.3508 & 0.4650 & 0.4337 & \textbf{0.4798} & 0.4605 & 0.3734 & 0.8879 & 0.9103 & 0.9485 \\
+\textbf{Overall mAP} & 0.4045 & 0.3508 & 0.4650 & 0.4337 & \textbf{0.4798} & 0.4605 & 0.3734 & 0.8879 & 0.9103 & 0.9485 \\
 \bottomrule
 \end{tabular}%
 }
@@ -271,19 +303,23 @@ Fig.~\ref{fig:weights} plots the empirical distributions of predicted weights, s
 \subsection{Deep-Learning Benchmarking and Edge Viability}
 Table~\ref{tab:deep_comp} benchmarks Proposed M5 against deep convolutional and vision-language architectures.
 
-\begin{table}[!t]
+\begin{table}[htbp]
 \centering
 \caption{Comparative evaluation between proposed adaptive handcrafted system and deep baselines on Corel-1K.}
 \label{tab:deep_comp}
+\renewcommand{\arraystretch}{1.3}
+\setlength{\tabcolsep}{8pt}
 \resizebox{\textwidth}{!}{%
 \begin{tabular}{llccccc}
 \toprule
 \textbf{Model} & \textbf{Feature Descriptor} & \textbf{Dim} & \textbf{P@10} & \textbf{mAP} & \textbf{Storage/Img} & \textbf{Latency (CPU)} \\
 \midrule
 \textbf{M5 (Proposed)} & \textbf{AI-Adaptive HSV+GLCM} & \textbf{13} & \textbf{0.7100} & \textbf{0.4798} & \textbf{52 Bytes} & \textbf{0.45 ms} \\
+\addlinespace[4pt]
 D1 (LBP) & Local Binary Patterns & 10 & 0.5090 & 0.3734 & 40 Bytes & 10.82 ms \\
 M3 (Equal) & Equal Fusion (0.5/0.5) & 13 & 0.6990 & 0.4650 & 52 Bytes & 0.41 ms \\
 M4 (Fixed) & Heuristic Fixed (0.7/0.3) & 13 & 0.6730 & 0.4337 & 52 Bytes & 0.41 ms \\
+\midrule
 D3 (EffNet) & EfficientNet-B0 (Pretrained) & 1280 & 0.9550 & 0.8879 & 5,120 Bytes & 9.71 ms \\
 D2 (ResNet) & ResNet-50 (Pretrained) & 2048 & 0.9580 & 0.9103 & 8,192 Bytes & 24.04 ms \\
 D5 (CLIP) & CLIP ViT-B/32 (LAION-2B) & 512 & 0.9860 & 0.9485 & 2,048 Bytes & 16.60 ms \\
