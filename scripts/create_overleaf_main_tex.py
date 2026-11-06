@@ -319,3 +319,4 @@ with open(OVERLEAF_DIR / "sn-article.tex", "w", encoding="utf-8") as f:
     f.write(latex_code.strip())
 
 print("Successfully written overleaf_project/main.tex and sn-article.tex")
+

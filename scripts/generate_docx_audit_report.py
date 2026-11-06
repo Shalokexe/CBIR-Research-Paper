@@ -601,3 +601,4 @@ All publication figures are ready in 300 DPI PNG inside `publication_figures/`:
 
 if __name__ == "__main__":
     create_audit_document()
+
