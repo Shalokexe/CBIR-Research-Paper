@@ -39,6 +39,13 @@
 }{%
   \end{tableorg}%
 }
+
+%% Center all table captions horizontally
+\long\def\@tablecaption#1#2{%
+  \setbox\tabcapbox\vbox{\tablecaptionfont\centering%
+  {\bfseries #1}{\hskip2mm}#2\vphantom{y}\par}%
+  \box\tabcapbox%
+}
 \makeatother
 
 \raggedbottom
@@ -142,20 +149,23 @@ The network was trained on the 700 gallery training images using the Adam optimi
 where $p$ is the hardest intra-class positive, $n$ is the hardest inter-class negative within the mini-batch, and margin $m = 0.15$. Early stopping evaluated on the 199 validation images selected the optimal model checkpoint at epoch 8 (serialized size 1.76~KB).
 
 \section{Experimental Setup}\label{sec4}
-\subsection{Datasets and Protocol}
-The Wang Corel-1K dataset (1,000 images, 10 categories: Africa, Beaches, Buildings, Buses, Dinosaurs, Elephants, Flowers, Horses, Mountains, Food) was audited with 64-bit $pHash$. One exact duplicate (\texttt{horses/761.jpg}) was purged from the gallery. The deterministic protocol (seed 42) partitions the data into 100 held-out queries (10 per category) and 899 gallery images (700 train, 199 validation). Zero query statistics were exposed during normalisation or training.
 
-Cross-dataset transfer was evaluated zero-shot on the official Oxford-IIIT Pet dataset (7,390 images, 37 cat and dog breeds; 370 held-out queries, 6,979 gallery images) without any retraining or adaptation.
+\subsection{Datasets and Protocol}\label{subsec4.1}
+The main benchmark is Wang's Corel-1K. It has 1,000 natural images in 10 categories of 100 images each: Africa, Beaches, Buildings, Buses, Dinosaurs, Elephants, Flowers, Horses, Mountains and Food. Before splitting, we ran a duplicate check on all images using 64-bit average perceptual hashing. It found one pair in the Horses category (\texttt{horses/760.jpg} and \texttt{horses/761.jpg}, Hamming distance 0), and we confirmed it by eye. We removed \texttt{horses/761.jpg} from the gallery, because a copy of the query would always be retrieved at rank 1.
 
-\subsection{Evaluated Configurations and Baselines}
-All six handcrafted configurations and four baseline models are summarized systematically in Table~\ref{tab:configurations}. These are evaluated on the 100 held-out queries across the identical 899-image gallery:
+With a fixed random seed of 42, we took 10 queries from each category, which gives 100 held-out queries. The other 899 images ($1{,}000 - 100 - 1$) form the gallery. Of these, 700 (70 per category) are used to train the MLP and 199 for validation (20 per category, 19 for Horses). The normalisation bounds come from the gallery only (Section~\ref{sec3}), and no query is used in training, validation or normalisation. An image counts as relevant if it has the same category as the query.
+
+To test transfer, we use the Oxford-IIIT Pet dataset, which has 37 breeds (12 cat and 25 dog). We take 10 queries per breed (370 in total) and use the remaining 6,979 images as the gallery. The Corel-trained model is applied without any retraining.
+
+\subsection{Reference Methods}\label{subsec4.2}
+The six configurations M1--M6 are defined in Section~\ref{sec3}, and all of them rank the same 899-image gallery. We add four reference methods. The first is an LBP baseline (10-D uniform histogram, chi-square distance). In addition, the other 3 are pretrained networks that are used as frozen feature extractors with cosine distance: ResNet-50 (2048-D, penultimate average-pooling layer), EfficientNet-B0 (1280-D), and CLIP ViT-B/32 (512-D). ImageNet-1K weights are used for ResNet-50 and EfficientNet-B0. None of these methods is fine-tuned or tuned on the queries. All configurations and reference methods are summarized in Table~\ref{tab:configurations}.
 
 \begin{table}[htbp]
 \centering
 \caption{Systematic overview of evaluated CBIR configurations and baseline models}\label{tab:configurations}
 \vspace{2mm}
 \renewcommand{\arraystretch}{1.25}
-\resizebox{\textwidth}{!}{%
+\centerline{\resizebox{\textwidth}{!}{%
 \begin{tabular}{clccll}
 \toprule
 \textbf{Model ID} & \textbf{Modality} & \textbf{Dim} & \textbf{Feature Descriptors} & \textbf{Weighting / Fusion Strategy} & \textbf{Distance Metric} \\
@@ -176,13 +186,18 @@ D2 & Deep CNN & 2048 & ResNet-50 avgpool (ImageNet) & Pretrained frozen deep emb
 D5 & Foundation & 512 & CLIP ViT-B/32 (LAION-2B) & Zero-shot vision-language & Cosine Distance \\
 \bottomrule
 \end{tabular}%
-}
+}}
 \end{table}
 
-\subsection{Evaluation Metrics and Statistical Testing}
-Performance is evaluated via Precision@10, Recall@10, F1@10, and mean Average Precision (mAP). F1@10 is computed per query using unrounded precision and recall prior to averaging: $F1_q = 2 \cdot (P_q \cdot R_q)/(P_q + R_q + \epsilon)$. 
+\subsection{Implementation Details}\label{subsec4.3}
+The architecture, optimiser, margin and stopping rule are in Section~\ref{sec3}. The remaining settings are a LeakyReLU negative slope of 0.1 and a weight decay of $10^{-5}$. Triplets are mined batch-hard inside each batch of 64 training images, with positives from the query's category and negatives from other categories. The saved checkpoint is 1.76~KB.
 
-Paired two-sided Wilcoxon signed-rank tests supported by 10,000 sign-flip permutation tests are conducted on per-query AP across the 100 queries. Non-parametric effect sizes (Hodges--Lehmann median differences) and 95\% confidence intervals (2,000 category-stratified bootstrap resamples) are reported with Holm--Bonferroni step-down correction ($\alpha = 0.05$). Runtimes were profiled on an Intel Core i7-14650HX CPU (16 cores, 24 threads, 16~GB DDR5 RAM).
+\subsection{Evaluation and Statistical Testing}\label{subsec4.4}
+The metrics are defined in Section~\ref{sec3}. Two details are not covered there. F1@10 is computed for each query from unrounded precision and recall and then averaged over queries. We do not take the harmonic mean of the averaged values. mAP is computed over the full 899-image ranking.
+
+Differences between methods are tested on the per-query average precision of the 100 queries. We do not use repeated runs. Each pair is compared with a two-sided Wilcoxon signed-rank test, backed by a sign-flip permutation test (10,000 permutations). We report Hodges--Lehmann median differences, Cohen's $d_z$ and win/tie/loss counts. The 95\% confidence intervals are based on 2,000 bootstrap resamples from the categories. Holm--Bonferroni correction is used to control for the family-wise error rate, with a difference being considered significant if the p-value after correction is below 0.05.
+
+M5 is assessed on category-stratified galleries of 25\%, 50\%, 75\% and 100\% of images (from 220 to 899), with and without the near-duplicate images, and with one category of images removed in turn. The time used is measured on a CPU (Intel Core i7-14650HX, 16~GB RAM). This includes feature extraction, MLP inference and distance computation with ranking. We also give the storage required for each image descriptor.
 
 \section{Results and Discussion}\label{sec5}
 
@@ -194,7 +209,7 @@ Table~\ref{tab:main_results} and Fig.~\ref{fig:main_perf} report retrieval perfo
 \caption{Retrieval performance comparison on the Corel-1K benchmark (899 gallery images, 100 held-out queries)}\label{tab:main_results}
 \vspace{2mm}
 \renewcommand{\arraystretch}{1.25}
-\resizebox{\textwidth}{!}{%
+\centerline{\resizebox{\textwidth}{!}{%
 \begin{tabular}{llcccccc}
 \toprule
 \textbf{Model} & \textbf{Fusion Strategy} & \textbf{Feature Space} & \textbf{Dim} & \textbf{P@10} & \textbf{R@10} & \textbf{F1@10} & \textbf{mAP} \\
@@ -210,7 +225,7 @@ M4 & Heuristic Fixed (0.7/0.3) & Fixed Hybrid & 13 & 0.6730 & 0.0749 & 0.1348 & 
 M6 & Mean Weight Control & Fixed Distance & 13 & 0.6960 & 0.0774 & 0.1394 & 0.4605 \\
 \bottomrule
 \end{tabular}%
-}
+}}
 \end{table}
 
 \begin{figure}[!t]
@@ -230,7 +245,7 @@ Table~\ref{tab:stat_sig} summarizes the paired inferential statistical contrasts
 \caption{Paired inferential statistical contrasts against Proposed M5 across 100 queries under Holm--Bonferroni correction}\label{tab:stat_sig}
 \vspace{2mm}
 \renewcommand{\arraystretch}{1.25}
-\resizebox{\textwidth}{!}{%
+\centerline{\resizebox{\textwidth}{!}{%
 \begin{tabular}{lccccccc}
 \toprule
 \textbf{Paired Contrast} & \textbf{Mean $\Delta$} & \textbf{Median $\Delta$} & \textbf{95\% Bootstrap CI} & \textbf{Wilcoxon $W$} & \textbf{Holm $p$} & \textbf{Cohen $d_z$} & \textbf{W / T / L} \\
@@ -246,7 +261,7 @@ M5 vs Equal Fusion (M3) & $+0.0148$ & $+0.0002$ & $[+0.0017, +0.0278]$ & 1972.0 
 M5 vs Mean Control (M6) & $+0.0193$ & $+0.0002$ & $[+0.0041, +0.0344]$ & 2353.0 & 0.6519 & $+0.25$ & 53 / 0 / 47 \\
 \bottomrule
 \end{tabular}%
-}
+}}
 \end{table}
 
 The inferential tests establish that M5 is statistically significantly superior to classical LBP texture ($p < 0.0001$, 81 wins vs 19 losses) and heuristic fixed fusion M4 ($p = 0.0001$, 76 wins vs 24 losses). Conversely, against equal fusion M3 (Holm $p = 0.6519$) and mean control M6 (Holm $p = 0.6519$), the differences do not reach statistical significance after family-wise error rate control. M5 outperformed M6 on 53 queries while underperforming on 47. Thus, the aggregate improvement of M5 over M3 and M6 is formally classified as descriptive.
@@ -259,8 +274,8 @@ Table~\ref{tab:cat_breakdown} disaggregates Average Precision across all 10 Core
 \caption{Per-category Average Precision breakdown across handcrafted models (M1--M6), classical texture (D1), and deep visual representations (D2, D3, D5)}\label{tab:cat_breakdown}
 \vspace{2mm}
 \renewcommand{\arraystretch}{1.25}
-\resizebox{\textwidth}{!}{%
-\begin{tabular}{lcccccc|cccc}
+\centerline{\resizebox{\textwidth}{!}{%
+\begin{tabular}{lcccccccccc}
 \toprule
 \textbf{Category} & \textbf{M1} & \textbf{M2} & \textbf{M3} & \textbf{M4} & \textbf{M5} & \textbf{M6} & \textbf{D1} & \textbf{D3} & \textbf{D2} & \textbf{D5} \\
  & (Colour) & (Texture) & (Equal) & (Fixed) & (Adaptive) & (Control) & (LBP) & (EffNet) & (ResNet) & (CLIP) \\
@@ -281,7 +296,7 @@ Food & 0.2830 & 0.2510 & 0.3660 & 0.3300 & 0.3662 & 0.3670 & 0.2670 & 0.8150 & 0
 \textbf{Overall mAP} & 0.4045 & 0.3508 & 0.4650 & 0.4337 & \textbf{0.4798} & 0.4605 & 0.3734 & 0.8879 & 0.9103 & 0.9485 \\
 \bottomrule
 \end{tabular}%
-}
+}}
 \end{table}
 
 \begin{figure}[!t]
@@ -314,7 +329,7 @@ Table~\ref{tab:deep_comp} benchmarks Proposed M5 against deep convolutional and 
 \caption{Comparative evaluation between proposed adaptive handcrafted system and deep baselines on Corel-1K}\label{tab:deep_comp}
 \vspace{2mm}
 \renewcommand{\arraystretch}{1.25}
-\resizebox{\textwidth}{!}{%
+\centerline{\resizebox{\textwidth}{!}{%
 \begin{tabular}{llccccc}
 \toprule
 \textbf{Model} & \textbf{Feature Descriptor} & \textbf{Dim} & \textbf{P@10} & \textbf{mAP} & \textbf{Storage/Img} & \textbf{Latency (CPU)} \\
@@ -330,7 +345,7 @@ D2 (ResNet) & ResNet-50 (Pretrained) & 2048 & 0.9580 & 0.9103 & 8,192 Bytes & 24
 D5 (CLIP) & CLIP ViT-B/32 (LAION-2B) & 512 & 0.9860 & 0.9485 & 2,048 Bytes & 16.60 ms \\
 \bottomrule
 \end{tabular}%
-}
+}}
 \end{table}
 
 While deep pretrained networks dominate semantic retrieval accuracy (mAP $0.88 - 0.95$), Table~\ref{tab:deep_comp} establishes the primary engineering justification for Proposed M5. ResNet-50 requires 8,192~bytes per image descriptor and incurs 24.04~ms extraction latency on CPU. In sharp contrast, Proposed M5 requires just \textbf{52~bytes per image} ($157.5\times$ smaller than ResNet-50 and $39.4\times$ smaller than CLIP) and extracts in \textbf{0.45~ms on CPU} ($53.4\times$ faster than ResNet-50). Moreover, the entire M5 weighting network occupies just 1.76~KB of memory (378 parameters), enabling direct on-chip cache persistence in embedded microcontrollers where deep neural backbones cannot execute.
