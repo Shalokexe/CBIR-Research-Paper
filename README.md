@@ -215,6 +215,17 @@ python scripts/generate_phase10_publication_package.py
 
 ---
 
+## 📄 Springer Nature LaTeX & Overleaf Submission Package
+
+The official Springer Nature (`sn-jnl.cls`) publication template has been fully pre-configured, tested, and packaged for direct deployment on Overleaf:
+
+- **Source Files**: [`overleaf_project/main.tex`](overleaf_project/main.tex) and [`overleaf_project/sn-article.tex`](overleaf_project/sn-article.tex)
+- **Deployment Archive**: [`overleaf_ready_submission.zip`](overleaf_ready_submission.zip) (One-click direct upload to Overleaf)
+- **Figures Directory**: [`overleaf_project/Figures/`](overleaf_project/Figures/) containing all 9 publication-grade diagrams (300 DPI)
+- **Geometry & Layout**: Balanced medium margins ($2.2\,\text{cm}$ borders, zero binding offset) maximizing text absorption to guarantee strict compliance with the **12-page ceiling**
+- **Table Formatting**: Native float centering with auto-scaling to textwidth (`\centerline{\resizebox{\textwidth}{!}{...}}`), eliminating margin overflow and compiler warnings
+- **Verified Floats**: Sequential numbering for Table 1 (Configurations), Table 2 (Benchmark Results), Table 3 (Statistical Contrasts), Table 4 (Category Breakdown), and Table 5 (Deep Baselines)
+
 ## 📑 Citation
 
 If you find this research work, codebase, or methodology useful in your academic research, please cite:
@@ -222,7 +233,7 @@ If you find this research work, codebase, or methodology useful in your academic
 ```bibtex
 @inproceedings{icain2026_cbir1567,
   title     = {Enhanced Content-Based Image Retrieval Using AI-Weighted Hybrid Colour and Texture Features},
-  author    = {Shalok and Collaborators},
+  author    = {Sharma, Prakriti and Dadhwal, Shalok and Jain, Sujal and Bhardwaj, Vijay and Singh, Jaspreet},
   booktitle = {Proceedings of the 7th International Conference on Artificial Intelligence and Networking (ICAIN 2026)},
   series    = {Lecture Notes in Networks and Systems (LNNS)},
   publisher = {Springer},
