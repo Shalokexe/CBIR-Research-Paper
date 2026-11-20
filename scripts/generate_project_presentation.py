@@ -991,7 +991,53 @@ def create_presentation(output_path):
     r_sfb.font.color.rgb = C_DARK
 
     # =============================================================
-    # SLIDE 18: CONCLUSION
+    # SLIDE 18: DOCUMENTARY EVIDENCE (MANDATORY VIVA PROOF)
+    # =============================================================
+    s_ev = prs.slides.add_slide(blank_layout)
+    add_header(s_ev, "Documentary Evidence: Official Acceptance & Registration Proof")
+    
+    # Left Box: Acceptance Letter
+    add_card(s_ev, Inches(0.8), Inches(1.5), Inches(5.7), Inches(5.4))
+    tb_ev1 = s_ev.shapes.add_textbox(Inches(1.0), Inches(1.6), Inches(5.3), Inches(0.6))
+    p_ev1 = tb_ev1.text_frame.paragraphs[0]
+    r_ev1 = p_ev1.add_run()
+    r_ev1.text = "ICAIN 2026 Official Paper Acceptance Letter\n"
+    r_ev1.font.name = "Times New Roman"
+    r_ev1.font.size = Pt(13)
+    r_ev1.font.bold = True
+    r_ev1.font.color.rgb = C_CRIMSON
+    p_ev1_sub = tb_ev1.text_frame.add_paragraph()
+    r_ev1_sub = p_ev1_sub.add_run()
+    r_ev1_sub.text = "Paper ID: 1567 | Springer LNNS Series | Date: 27 Oct 2026"
+    r_ev1_sub.font.name = "Times New Roman"
+    r_ev1_sub.font.size = Pt(10)
+    r_ev1_sub.font.color.rgb = C_DARK
+    
+    if os.path.exists("publication_figures/acceptance_email.png"):
+        s_ev.shapes.add_picture("publication_figures/acceptance_email.png", Inches(1.1), Inches(2.3), width=Inches(5.1), height=Inches(4.4))
+        
+    # Right Box: Registration Receipt
+    add_card(s_ev, Inches(6.8), Inches(1.5), Inches(5.7), Inches(5.4))
+    tb_ev2 = s_ev.shapes.add_textbox(Inches(7.0), Inches(1.6), Inches(5.3), Inches(0.6))
+    p_ev2 = tb_ev2.text_frame.paragraphs[0]
+    r_ev2 = p_ev2.add_run()
+    r_ev2.text = "ICAIN 2026 Conference Registration Payment Receipt\n"
+    r_ev2.font.name = "Times New Roman"
+    r_ev2.font.size = Pt(13)
+    r_ev2.font.bold = True
+    r_ev2.font.color.rgb = C_NAVY
+    p_ev2_sub = tb_ev2.text_frame.add_paragraph()
+    r_ev2_sub = p_ev2_sub.add_run()
+    r_ev2_sub.text = "Amount: Rs. 16,500/- | Paid by: Prakriti Sharma | Date: 30 Oct 2026"
+    r_ev2_sub.font.name = "Times New Roman"
+    r_ev2_sub.font.size = Pt(10)
+    r_ev2_sub.font.color.rgb = C_DARK
+    
+    if os.path.exists("publication_figures/registration_receipt.png"):
+        s_ev.shapes.add_picture("publication_figures/registration_receipt.png", Inches(7.1), Inches(2.3), width=Inches(5.1), height=Inches(4.4))
+
+    # =============================================================
+    # SLIDE 19: CONCLUSION
     # =============================================================
     s18 = prs.slides.add_slide(blank_layout)
     add_header(s18, "Conclusion")
